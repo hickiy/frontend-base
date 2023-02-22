@@ -18,14 +18,22 @@
     "allowJs": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
-    }
+      "@/*": [
+        "src/*"
+      ]
+    },
+    "types": [
+      "vite/client",
+      "element-plus/global"
+    ]
   },
   "include": [
     "src/**/*.ts",
     "src/**/*.d.ts",
     "src/**/*.tsx",
-    "src/**/*.vue"
+    "src/**/*.vue",
+    "auto-imports.d.ts",
+    "components.d.ts"
   ],
   "references": [
     {
