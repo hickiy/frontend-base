@@ -1,15 +1,15 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import main from '@/components/layout/index.vue';
-import home from '@/views/index/index.vue'
+import user from '@/views/system/user/index.vue';
 
 const routes = [
   {
-    path: '/', 
+    path: '/',
     component: main,
     children: [
       {
         path: '',
-        component: home,
+        component: user,
       }
     ]
   }

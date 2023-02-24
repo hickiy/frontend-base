@@ -1,6 +1,6 @@
 <!-- hickey 2023 -->
 <template>
-  <div></div>
+  <div>login</div>
 </template>
 
 <script setup lang="ts">

@@ -1,5 +1,5 @@
 <template>
-  <div class="px-12 py-2 flex flex-nowrap justify-between bor border-b border-gray-300">
+  <div class="px-[16px] py-2 flex flex-nowrap justify-between bor border-b border-gray-300">
     <img class="w-14 rounded-full" src="@/assets/img/favicon.jpg"/>
     <div class="flex flex-none items-center">
       <el-input class="w-60 mr-8" type="text" prefix-icon="el-icon-position"></el-input>
