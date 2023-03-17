@@ -1,7 +1,6 @@
-@import url("./theme-default.css");
+@import "./theme-blue.css";
+@import "./theme-default.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-
-
