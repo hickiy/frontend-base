@@ -1,25 +1,19 @@
-import NProgress from "nprogress";
-import { getToken } from "@/utils/cookies.js";
+import { RouteLocationNormalizedLoaded, NavigationGuardNext } from 'vue-router/dist/vue-router';
+import NProgress from 'nprogress';
+import { getToken } from '@/utils/cookies.js';
+import user from '@/store/user';
 
-import {
-  RouteLocationNormalizedLoaded,
-  NavigationGuardNext,
-} from "vue-router/dist/vue-router";
-
-export function beforeEach(
-  to: RouteLocationNormalizedLoaded,
-  from: RouteLocationNormalizedLoaded,
-  next: NavigationGuardNext
-) {
+export function beforeEach(to: RouteLocationNormalizedLoaded, from: RouteLocationNormalizedLoaded, next: NavigationGuardNext) {
   NProgress.start();
-  if (to.path !== "/login") {
+  if (to.path !== '/login') {
     if (getToken()) {
-      next();
+      const userStore = user();
+      userStore.init().then(next);
     } else {
-      next("/login");
+      next('/login');
     }
   } else {
-    next()
+    next();
   }
 }
 

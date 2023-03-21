@@ -29,3 +29,7 @@ const router = createRouter({
 router.beforeEach(beforeEach);
 
 export default router;
+
+export function addRouter() {
+  
+}

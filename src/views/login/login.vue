@@ -10,24 +10,30 @@
         <el-input v-model="loginForm.password" type="password" size="large" auto-complete="off" placeholder="密码" @keyup.enter="handleLogin">
         </el-input>
       </el-form-item>
+      <el-form-item prop="code">
+        <el-input v-model="loginForm.code" size="large" auto-complete="off" placeholder="验证码" style="width: 63%" @keyup.enter="handleLogin">
+          <template #prefix><el-icon /><Promotion /></template>
+        </el-input>
+        <div class="login-code">
+          <img :src="codeUrl" @click="getCode" class="login-code-img" />
+        </div>
+      </el-form-item>
       <el-checkbox v-model="loginForm.rememberMe" style="margin: 0px 0px 25px 0px">记住密码</el-checkbox>
       <el-form-item>
         <el-button size="large" style="width: 100%" @click="handleLogin">登 录</el-button>
       </el-form-item>
     </el-form>
     <!--  底部  -->
-    <span class="absolute bottom-8 red">Copyright © 2018-2023 hickey.ionrocking All Rights Reserved.</span>
+    <span class="absolute bottom-8 copyright">Copyright © 2018-2023 hickey.ionrocking All Rights Reserved.</span>
   </div>
 </template>
 
 <script setup>
-import Cookies from 'js-cookie';
+import request from '@/utils/httpRequest';
+import { setToken } from '@/utils/cookies';
+import { useRouter } from 'vue-router';
 
-const loginForm = ref({
-  username: 'admin',
-  password: 'admin123',
-  rememberMe: false
-});
+const router = useRouter();
 
 const loginRules = {
   username: [{ required: true, trigger: 'blur', message: '请输入您的账号' }],
@@ -35,9 +41,41 @@ const loginRules = {
   code: [{ required: true, trigger: 'change', message: '请输入验证码' }]
 };
 
-const loading = ref(false);
+const loginForm = ref({
+  username: 'admin',
+  password: 'admin123',
+  code: '',
+  rememberMe: false
+});
 
-function handleLogin() {}
+const codeUrl = ref('');
+
+function handleLogin() {
+  request({
+    method: 'post',
+    url: '/login',
+    data: loginForm.value,
+    headers: {
+      isToken: false
+    }
+  }).then((res) => {
+    setToken(res.token);
+    router.push('/');
+  });
+}
+
+function getCode() {
+  request({
+    method: 'get',
+    url: '/captchaImage',
+    headers: {
+      isToken: false
+    }
+  }).then((res) => {
+    codeUrl.value = 'data:image/gif;base64,' + res.img;
+    loginForm.value.uuid = res.uuid;
+  });
+}
 
 function getCookie() {
   const username = Cookies.get('username');
@@ -49,10 +87,16 @@ function getCookie() {
     rememberMe: rememberMe === undefined ? false : Boolean(rememberMe)
   };
 }
+
+getCode();
 </script>
 
-<style lang="scss">
-.red {
+<style>
+.login-code-img {
+  height: 40px;
+  padding-left: 12px;
+}
+.copyright {
   color: var(--red);
 }
 </style>
