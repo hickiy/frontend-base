@@ -12,7 +12,6 @@
 <script setup lang="ts">
 const props = defineProps(['menuItem']);
 const hasChildren = computed(() => {
-  console.log(props.menuItem);
   return props.menuItem.children && Array.isArray(props.menuItem.children) && props.menuItem.children.length > 0;
 });
 </script>

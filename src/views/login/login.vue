@@ -30,9 +30,9 @@
 
 <script setup>
 import request from '@/utils/httpRequest';
-import { setToken } from '@/utils/cookies';
+import user from '@/store/user';
 import { useRouter } from 'vue-router';
-
+const userStore = user();
 const router = useRouter();
 
 const loginRules = {
@@ -51,17 +51,12 @@ const loginForm = ref({
 const codeUrl = ref('');
 
 function handleLogin() {
-  request({
-    method: 'post',
-    url: '/login',
-    data: loginForm.value,
-    headers: {
-      isToken: false
-    }
-  }).then((res) => {
-    setToken(res.token);
-    router.push('/');
-  });
+  userStore
+    .login(loginForm.value)
+    .then(() => {
+      router.push('/');
+    })
+    .catch(getCode);
 }
 
 function getCode() {

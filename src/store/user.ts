@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import request from '@/utils/httpRequest';
+import { setToken } from '@/utils/cookies';
 
 export default defineStore('user', {
   state: () => {
@@ -9,9 +10,17 @@ export default defineStore('user', {
     };
   },
   actions: {
-    async init() {
-      await this.getUserInfo();
-      await this.getMenu();
+    login(data: any) {
+      return request({
+        method: 'post',
+        url: '/login',
+        data,
+        headers: {
+          isToken: false
+        }
+      }).then((res: any) => {
+        setToken(res.token);
+      });
     },
     getUserInfo() {
       return request({
