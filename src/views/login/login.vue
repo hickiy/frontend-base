@@ -31,9 +31,9 @@
 <script setup>
 import request from '@/utils/httpRequest';
 import user from '@/store/user';
-import { useRouter } from 'vue-router';
+import router from '@/router';
+
 const userStore = user();
-const router = useRouter();
 
 const loginRules = {
   username: [{ required: true, trigger: 'blur', message: '请输入您的账号' }],

@@ -1,19 +1,21 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { beforeEach } from "./route-hooks";
-import main from "@/components/layout/index.vue";
-import login from "@/views/login/login.vue";
 
 const routes = [
   {
     path: "/login",
     name: "Login",
-    component: login,
+    component: () => import("@/views/login/login.vue"),
   },
   {
     path: "/",
     name: "Main",
-    component: main,
+    component: () => import("@/components/layout/index.vue"),
   },
+  {
+    path: "/:pathMatch(.*)*",
+    component: () => import("@/views/404/index.vue"),
+  }
 ];
 
 const router = createRouter({

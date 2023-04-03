@@ -1,6 +1,20 @@
+/*
+  import Message default style when using Message as a global API 
+ */
+@import 'element-plus/theme-chalk/base.css';
+@import 'element-plus/theme-chalk/el-badge.css';
+@import 'element-plus/theme-chalk/el-message.css';
+
+/*
+  custom theme
+ */
 @import "./theme-blue.css";
 @import "./theme-default.css";
 
+
+/*
+  import tailwindcss
+ */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

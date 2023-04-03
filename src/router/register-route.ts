@@ -13,7 +13,7 @@ function addRoute(route: any) {
       addRoute(child);
     });
   } else {
-    router.addRoute('Main', { ...route, component: loadComponent(route.component) });
+    router.addRoute('Main', { ...route, path: route.component, component: loadComponent(route.component) });
   }
 }
 
@@ -23,5 +23,4 @@ export default function registerDynamicRoute() {
   routes.forEach((route: any) => {
     addRoute(route);
   });
-  console.log(router.getRoutes());
 }
