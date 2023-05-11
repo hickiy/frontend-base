@@ -1,6 +1,6 @@
 <!-- hickey 2023 -->
 <template>
-  <div class="min-h-screen flex flex-col items-center justify-center">
+  <div class="login min-h-screen flex flex-col items-center justify-center">
     <el-form class="w-[400px]" ref="loginRef" :model="loginForm" :rules="loginRules">
       <h3 class="title"></h3>
       <el-form-item prop="username">
@@ -28,7 +28,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import request from '@/utils/httpRequest';
 import user from '@/store/user';
 import router from '@/router';
@@ -86,7 +86,10 @@ function getCookie() {
 getCode();
 </script>
 
-<style>
+<style lang="scss" scoped>
+.login {
+  background: url("@/assets/img/login-bg.png") no-repeat center center;
+}
 .login-code-img {
   height: 40px;
   padding-left: 12px;

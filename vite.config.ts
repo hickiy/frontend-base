@@ -26,7 +26,6 @@ export default defineConfig({
     alias: {
       '@': pathSrc
     },
-    extensions: ['.js', '.ts', '.tsx', '.vue']
   },
   plugins: [
     vue(),
