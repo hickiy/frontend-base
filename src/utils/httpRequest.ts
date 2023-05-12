@@ -3,6 +3,8 @@ import { ElMessage } from 'element-plus';
 import router from '@/router/index';
 import { getToken } from '@/utils/cookies';
 
+import type { InternalAxiosRequestConfig, AxiosResponse } from 'axios';
+
 const http = axios.create({
   timeout: 1000 * 3600 * 2,
   baseURL: '/api',
@@ -12,7 +14,7 @@ const http = axios.create({
 /**
  * 请求拦截
  */
-http.interceptors.request.use((config) => {
+http.interceptors.request.use((config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
   if (getToken()) {
     config.headers['Authorization'] = 'Bearer ' + getToken(); // 让每个请求携带自定义token 请根据实际情况自行修改
   }
@@ -24,7 +26,7 @@ http.interceptors.request.use((config) => {
  */
 
 http.interceptors.response.use(
-  (res) => {
+  (res: AxiosResponse) => {
     if (res?.data?.code == 200) {
       return res.data;
     } else {

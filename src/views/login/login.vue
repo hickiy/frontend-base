@@ -41,18 +41,18 @@ const loginRules = {
   code: [{ required: true, trigger: 'change', message: '请输入验证码' }]
 };
 
-const loginForm = ref({
+const loginForm = reactive({
   username: 'admin',
   password: 'admin123',
   code: '',
   rememberMe: false
 });
 
-const codeUrl = ref('');
+const codeUrl: Ref<string> = ref('');
 
 function handleLogin() {
   userStore
-    .login(loginForm.value)
+    .login(loginForm)
     .then(() => {
       router.push('/');
     })
@@ -60,7 +60,7 @@ function handleLogin() {
 }
 
 function getCode() {
-  request({
+  request<{ img: string }>({
     method: 'get',
     url: '/captchaImage',
     headers: {
@@ -68,19 +68,7 @@ function getCode() {
     }
   }).then((res) => {
     codeUrl.value = 'data:image/gif;base64,' + res.img;
-    loginForm.value.uuid = res.uuid;
   });
-}
-
-function getCookie() {
-  const username = Cookies.get('username');
-  const password = Cookies.get('password');
-  const rememberMe = Cookies.get('rememberMe');
-  loginForm.value = {
-    username: username === undefined ? loginForm.value.username : username,
-    password: password === undefined ? loginForm.value.password : decrypt(password),
-    rememberMe: rememberMe === undefined ? false : Boolean(rememberMe)
-  };
 }
 
 getCode();
@@ -88,7 +76,7 @@ getCode();
 
 <style lang="scss" scoped>
 .login {
-  background: url("@/assets/img/login-bg.png") no-repeat center center;
+  background: url('@/assets/img/login-bg.png') no-repeat center center;
 }
 .login-code-img {
   height: 40px;
