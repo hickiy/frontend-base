@@ -45,7 +45,8 @@ const loginForm = reactive({
   username: 'admin',
   password: 'admin123',
   code: '',
-  rememberMe: false
+  rememberMe: false,
+  uuid: ''
 });
 
 const codeUrl: Ref<string> = ref('');
@@ -56,11 +57,14 @@ function handleLogin() {
     .then(() => {
       router.push('/');
     })
-    .catch(getCode);
+    .catch((err) => {
+      console.log(err)
+      getCode();
+    });
 }
 
 function getCode() {
-  request<{ img: string }>({
+  request<object, { img: string; uuid: string }>({
     method: 'get',
     url: '/captchaImage',
     headers: {
@@ -68,6 +72,7 @@ function getCode() {
     }
   }).then((res) => {
     codeUrl.value = 'data:image/gif;base64,' + res.img;
+    loginForm.uuid = res.uuid;
   });
 }
 

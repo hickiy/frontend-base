@@ -26,4 +26,4 @@ const defaultActive = computed(() => {
 });
 </script>
 
-<style scoped></style>
+<style></style>

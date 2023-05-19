@@ -3,17 +3,25 @@
   <div v-if="inIframe">
     <router-view></router-view>
   </div>
-  <div v-else>
-    <Header></Header>
-    <el-container>
-      <SideBar></SideBar>
-      <router-view v-slot="{ Component }">
-        <transition name="el-fade-in-linear" mode="out-in">
-          <keep-alive>
-            <component :is="Component"></component>
-          </keep-alive>
-        </transition>
-      </router-view>
+  <div class="h-screen" v-else>
+    <el-container class="h-full">
+      <el-aside width="250px" class="bg-blue-600">
+        <SideBar></SideBar>
+      </el-aside>
+      <el-container>
+        <el-header>
+          <Header></Header>
+        </el-header>
+        <el-main>
+          <router-view v-slot="{ Component }">
+            <transition name="el-fade-in-linear" mode="out-in">
+              <keep-alive>
+                <component :is="Component"></component>
+              </keep-alive>
+            </transition>
+          </router-view>
+        </el-main>
+      </el-container>
     </el-container>
   </div>
 </template>
@@ -25,4 +33,4 @@ import SideBar from '@/components/layout/sidebar.vue';
 const inIframe: Boolean = self !== top;
 </script>
 
-<style scoped></style>
+<style></style>

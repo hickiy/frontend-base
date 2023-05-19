@@ -6,13 +6,6 @@
 @import 'element-plus/theme-chalk/el-message.css';
 
 /*
-  custom theme
- */
-@import "./theme-blue.css";
-@import "./theme-default.css";
-
-
-/*
   import tailwindcss
  */
 @tailwind base;

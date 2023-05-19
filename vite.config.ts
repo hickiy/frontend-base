@@ -7,8 +7,6 @@ import Components from 'unplugin-vue-components/vite';
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
 import Inspect from 'vite-plugin-inspect';
 
-const pathSrc = path.resolve(__dirname, 'src');
-
 // https://vitejs.dev/config/
 export default defineConfig({
   server: {
@@ -24,8 +22,15 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': pathSrc
-    },
+      '@/': `${path.resolve(__dirname, 'src')}/`
+    }
+  },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `@use "@/assets/css/variables.scss" as *;`
+      }
+    }
   },
   plugins: [
     vue(),
@@ -35,16 +40,14 @@ export default defineConfig({
         // 自动导入 Vue 相关函数，如：ref, reactive, toRef 等
         'vue'
       ],
-      resolvers: [
-        // 自动导入 Element Plus 相关函数，如：ElMessage, ElMessageBox... (带样式)
-        ElementPlusResolver()
-      ],
       dts: 'auto-imports.d.ts'
     }),
     Components({
       resolvers: [
         // 自动导入 Element Plus 组件
-        ElementPlusResolver()
+        ElementPlusResolver({
+          importStyle: true
+        })
       ],
       dts: 'components.d.ts'
     }),
