@@ -13,6 +13,7 @@
         <el-option value="停用">停用</el-option>
       </el-select>
     </el-form-item>
+    <el-button type="primary">test</el-button>
   </el-form>
 </template>
 

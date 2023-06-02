@@ -10,7 +10,7 @@ const routes = [
   {
     path: "/",
     name: "Main",
-    component: () => import("@/components/layout/index.vue"),
+    component: () => import("@/layout/index.vue"),
   },
   {
     path: "/:pathMatch(.*)*",

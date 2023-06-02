@@ -28,9 +28,9 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: `@use "@/assets/css/variables.scss" as *;`
-      }
-    }
+        additionalData: `@use "@/assets/css/var.scss" as *;`,
+      },
+    },
   },
   plugins: [
     vue(),
@@ -46,7 +46,7 @@ export default defineConfig({
       resolvers: [
         // 自动导入 Element Plus 组件
         ElementPlusResolver({
-          importStyle: true
+          importStyle: 'sass',
         })
       ],
       dts: 'components.d.ts'

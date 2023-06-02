@@ -27,8 +27,8 @@
 </template>
 
 <script setup lang="ts">
-import Header from '@/components/layout/header.vue';
-import SideBar from '@/components/layout/sidebar.vue';
+import Header from '@/layout/header.vue';
+import SideBar from '@/layout/sidebar.vue';
 
 const inIframe: Boolean = self !== top;
 </script>
