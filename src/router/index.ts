@@ -1,26 +1,26 @@
-import { createRouter, createWebHistory } from "vue-router";
-import { beforeEach } from "./route-hooks";
+import { createRouter, createWebHistory } from 'vue-router';
+import { beforeEach } from './route-hooks';
 
 const routes = [
   {
-    path: "/login",
-    name: "Login",
-    component: () => import("@/views/login/login.vue"),
+    path: '/login',
+    name: 'Login',
+    component: () => import('@/views/login/login.vue')
   },
   {
-    path: "/",
-    name: "Main",
-    component: () => import("@/layout/index.vue"),
+    path: '/',
+    name: 'Main',
+    component: () => import('@/layout/index.vue')
   },
   {
-    path: "/:pathMatch(.*)*",
-    component: () => import("@/views/404/index.vue"),
+    path: '/:pathMatch(.*)*',
+    component: () => import('@/views/404/index.vue')
   }
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
-  routes,
+  history: createWebHistory(process.env.NODE_ENV === 'production' ? '/base/' : '/'),
+  routes
 });
 
 router.beforeEach(beforeEach);
