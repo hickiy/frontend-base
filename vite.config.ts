@@ -9,14 +9,18 @@ import Inspect from 'vite-plugin-inspect';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: process.env.NODE_ENV === 'production' ? '/base/' : '/',
+  build: {
+    outDir: 'base'
+  },
   server: {
     port: 5173,
     open: true,
     proxy: {
-      '/api': {
+      '/base-api': {
         target: 'http://vue.ruoyi.vip/prod-api',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '')
+        rewrite: (path) => path.replace(/^\/base-api/, '')
       }
     }
   },
@@ -28,9 +32,9 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: `@use "@/assets/css/var.scss" as *;`,
-      },
-    },
+        additionalData: `@use "@/assets/css/var.scss" as *;`
+      }
+    }
   },
   plugins: [
     vue(),
@@ -46,7 +50,7 @@ export default defineConfig({
       resolvers: [
         // 自动导入 Element Plus 组件
         ElementPlusResolver({
-          importStyle: 'sass',
+          importStyle: 'sass'
         })
       ],
       dts: 'components.d.ts'

@@ -5,7 +5,7 @@ import { getToken } from '@/utils/cookies';
 
 const http = axios.create({
   timeout: 1000 * 3600 * 2,
-  baseURL: '/api',
+  baseURL: '/base-api',
   withCredentials: true
 });
 

@@ -12,7 +12,7 @@
     "lib": ["ESNext", "DOM"],
     "skipLibCheck": true,
     "noEmit": true,
-    "allowJs": false,
+    "allowJs": true,
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
