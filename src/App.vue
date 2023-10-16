@@ -1,6 +1,15 @@
 <template>
-  <router-view></router-view>
+  <router-view />
 </template>
-<script lang="ts">
-export default {}
-</script> 
+
+<script setup>
+import useSettingsStore from '@/store/modules/settings'
+import { handleThemeStyle } from '@/utils/theme'
+
+onMounted(() => {
+  nextTick(() => {
+    // 初始化主题样式
+    handleThemeStyle(useSettingsStore().theme)
+  })
+})
+</script>
