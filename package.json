@@ -1,8 +1,8 @@
 {
-  "name": "ruoyi",
-  "version": "3.8.6",
-  "description": "若依管理系统",
-  "author": "若依",
+  "name": "hickey-frontend-base",
+  "version": "0.1.0",
+  "description": "team cli project",
+  "author": "hickey",
   "license": "MIT",
   "scripts": {
     "dev": "vite",
