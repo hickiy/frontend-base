@@ -1,6 +1,8 @@
 import { defineConfig, loadEnv } from 'vite';
 import path from 'path';
 import createVitePlugins from './vite';
+import tailwindcss from 'tailwindcss';
+import autoprefixer from 'autoprefixer';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode, command }) => {
@@ -41,6 +43,10 @@ export default defineConfig(({ mode, command }) => {
     css: {
       postcss: {
         plugins: [
+          tailwindcss({
+            config: './tailwind.config.js'
+          }),
+          autoprefixer({}),
           {
             postcssPlugin: 'internal:charset-removal',
             AtRule: {
@@ -56,3 +62,4 @@ export default defineConfig(({ mode, command }) => {
     }
   };
 });
+

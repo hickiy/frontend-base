@@ -1,11 +1,9 @@
 <template>
-  <div class="login fl-r jc-c ai-c">
+  <div class="login">
     <!-- 登录输入框 -->
-    <div class="content">
-      <div class="type-change pointer" :style="`background-image: url(${loginTypeIcon})`" @click="loginTypeChange"></div>
-      <div class="form-title">{{ loginTypeTitle }}</div>
+    <div class="content flex flex-col justify-around">
       <div class="form-sub-title">欢迎您进入运营管理中心！</div>
-      <el-form ref="loginRef" :model="loginForm" :rules="loginRules" class="login-form" hide-required-asterisk>
+      <el-form class="login-form" ref="loginRef" :model="loginForm" :rules="loginRules" hide-required-asterisk>
         <el-form-item prop="username" label="账号">
           <el-input v-model="loginForm.username" prefix-icon="icon-user" type="text" auto-complete="user" placeholder="请输入账号或手机号">
           </el-input>
@@ -13,30 +11,22 @@
         <el-form-item prop="password" label="密码">
           <el-input
             v-model="loginForm.password"
-            :type="pwdType"
+            type="password"
             auto-complete="pwd"
             prefix-icon="icon-lock"
             placeholder="请输入密码（6-20个字符）"
             @keyup.enter.native="handleLogin"
           >
-            <i slot="suffix" :class="['pointer', pwdSuffixIcon]" @click="viewPwd = !viewPwd"></i>
           </el-input>
         </el-form-item>
-        <el-form-item>
-          <div class="fl-r jc-fe ai-c">
-            <router-link to="/reset/pwd/1" class="pointer">忘记密码</router-link>
-          </div>
-        </el-form-item>
-
-        <el-form-item style="width: 100%">
-          <el-button :loading="loading" size="medium" type="primary" style="width: 100%" @click.native.prevent="handleLogin">
-            <span v-if="!loading">登 录</span>
-            <span v-else>登 录 中...</span>
-          </el-button>
-        </el-form-item>
       </el-form>
+      <div>
+        <el-button :loading="loading" type="primary" style="width: 100%" @click.native.prevent="handleLogin">
+          <span v-if="!loading">登 录</span>
+          <span v-else>登 录 中...</span>
+        </el-button>
+      </div>
     </div>
-
     <!--  底部  -->
     <div class="el-login-footer">
       <span>Copyright © 2021-2022 Ion Rocking. All Rights Reserved.</span>
@@ -55,14 +45,14 @@ const router = useRouter();
 const { proxy } = getCurrentInstance();
 
 const loginForm = ref({
-  username: 'admin',
-  password: '123456',
-  rememberMe: false,
+  username: '',
+  password: '',
+  rememberMe: false
 });
 
 const loginRules = {
   username: [{ required: true, trigger: 'blur', message: '请输入您的账号' }],
-  password: [{ required: true, trigger: 'blur', message: '请输入您的密码' }],
+  password: [{ required: true, trigger: 'blur', message: '请输入您的密码' }]
 };
 
 const loading = ref(false);
@@ -132,19 +122,21 @@ getCookie();
   min-height: 768px;
   background: url('@/assets/login/login_logo_white@2x.png') 140px 60px / 140px auto no-repeat,
     url('@/assets/login/login_title_2@2x.png') center 80px / 507px auto no-repeat, url('@/assets/login/login_bg@2x.png') 0 0 / 100% no-repeat, #f7f8fa;
-  position: relative;
+  display: grid;
+  grid-template-rows: auto 38px;
+  grid-template-columns: 100%;
+  justify-items: center;
+  align-items: center;
 }
 .content {
-  position: relative;
-  top: 40px;
+  margin-top: 120px;
   width: 860px;
   height: 460px;
   border-radius: 10px;
   background: #ffffff;
   box-shadow: 0px 7.98px 19.98px 1.02px rgba(14, 54, 122, 0.1);
-  padding: 30px 20px 30px 450px;
+  padding: 30px 40px 30px 480px;
   background: url('@/assets/login/login_img@2x.png') 19.98px center / 420px auto no-repeat, #ffffff;
-  position: relative;
   .type-change {
     position: absolute;
     top: 0;
@@ -163,9 +155,8 @@ getCookie();
   color: #86909c;
   margin-bottom: 30px;
 }
-.login-form::v-deep {
-  padding-right: 50px;
-  .el-form-item__label {
+.login-form {
+  &:deep(.el-form-item__label) {
     font-size: 14px;
     color: #1e2e4e;
   }
@@ -199,9 +190,6 @@ getCookie();
   margin-top: 12px;
 }
 .el-login-footer {
-  position: absolute;
-  bottom: 0;
-  margin-bottom: 20px;
   color: #80a1de;
   font-size: 12px;
 }
