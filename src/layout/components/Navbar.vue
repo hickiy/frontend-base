@@ -101,8 +101,9 @@ function setLayout() {
 </script>
 
 <style lang='scss' scoped>
+@import "@/assets/styles/variables.module.scss";
 .navbar {
-  height: 50px;
+  height: $base-navbar-height;
   overflow: hidden;
   position: relative;
   background: #fff;
