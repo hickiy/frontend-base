@@ -165,8 +165,7 @@ function setLayout() {
     }
 
     .avatar-container {
-      margin-right: 40px;
-
+      // margin-right: 40px;
       .avatar-wrapper {
         margin-top: 5px;
         position: relative;
