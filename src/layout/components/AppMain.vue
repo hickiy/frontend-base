@@ -20,8 +20,11 @@ const tagsViewStore = useTagsViewStore()
 
 <style lang="scss" scoped>
 .app-main {
-  /* 50= navbar  50  */
-  min-height: calc(100vh - 50px);
+  /* 
+  * navbar 50px
+  * breadcrumb 57px
+  */
+  min-height: calc(100vh - 107px);
   width: 100%;
   position: relative;
   overflow: hidden;
