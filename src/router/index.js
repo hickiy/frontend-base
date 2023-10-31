@@ -1,6 +1,6 @@
-import { createWebHistory, createRouter } from 'vue-router'
+import { createWebHistory, createRouter } from 'vue-router';
 /* Layout */
-import Layout from '@/layout'
+import Layout from '@/layout';
 
 /**
  * Note: 路由配置项
@@ -48,7 +48,7 @@ export const constantRoutes = [
     hidden: true
   },
   {
-    path: "/:pathMatch(.*)*",
+    path: '/:pathMatch(.*)*',
     component: () => import('@/views/error/404'),
     hidden: true
   },
@@ -59,8 +59,28 @@ export const constantRoutes = [
   },
   {
     path: '',
-    component: Layout,
     redirect: '/index',
+    component: Layout,
+    children: [
+      {
+        path: '/test/subpage1',
+        props: (route) => route.query,
+        component: () => import('@/views/test/subpage1.vue'),
+        meta: { title: '测试子页面1', activeMenu: '/index' },
+        hidden: true
+      },
+      {
+        path: '/test/subpage2',
+        props: (route) => route.query,
+        component: () => import('@/views/test/subpage2.vue'),
+        meta: { title: '测试子页面2', activeMenu: '/index' },
+        hidden: true
+      }
+    ]
+  },
+  {
+    path: '/index',
+    component: Layout,
     children: [
       {
         path: '/index',
@@ -84,7 +104,7 @@ export const constantRoutes = [
       }
     ]
   }
-]
+];
 
 // 动态路由，基于用户权限动态去加载
 export const dynamicRoutes = [
@@ -158,18 +178,18 @@ export const dynamicRoutes = [
       }
     ]
   }
-]
+];
 
 const router = createRouter({
   history: createWebHistory(),
   routes: constantRoutes,
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
-      return savedPosition
+      return savedPosition;
     } else {
-      return { top: 0 }
+      return { top: 0 };
     }
-  },
+  }
 });
 
 export default router;
