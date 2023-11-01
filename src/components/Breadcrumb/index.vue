@@ -34,16 +34,22 @@ function getBreadcrumb() {
   } else {
     levelList.value = matched.filter((item) => item.meta && item.meta.title);
   }
+}
+
+function cacheBreadcrumb() {
   window.sessionStorage.setItem('breadcrumb-cache', JSON.stringify(levelList.value));
 }
 
-function isDashboard(route) {
-  const name = route && route.name;
-  if (!name) {
-    return false;
-  }
-  return name.trim() === 'Index';
-}
+window.addEventListener('beforeunload', cacheBreadcrumb);
+
+// function isDashboard(route) {
+//   const name = route && route.name;
+//   if (!name) {
+//     return false;
+//   }
+//   return name.trim() === 'Index';
+// }
+
 function handleLink(item) {
   const { redirect, path } = item;
   if (redirect) {
@@ -66,6 +72,10 @@ onMounted(() => {
     getBreadcrumb();
   });
   getBreadcrumb();
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('beforeunload', cacheBreadcrumb);
 });
 </script>
 
