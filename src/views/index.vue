@@ -1,13 +1,11 @@
 <template>
   <div>
-    <h1>index</h1>
-    <router-link to="/test/subpage1">subpage1</router-link>
-    
+    <el-input v-model="a"></el-input>    
   </div>
 </template>
 
 <script setup>
-
+  const a = ref(1);
 </script>
 
 <style scoped lang="scss">
