@@ -10,11 +10,9 @@ export default {
   setup(props, ctx) {
     const instance = getCurrentInstance();
     console.log(instance);
-    instance.emitsOptions.keydown = (e) => {
-      if (e.target.value.length > props.decimal) {
-        e.preventDefault();
-      }
-      return true;
+    instance.vnode.props.onKeydown = (e) => {
+      console.log('121221212');
+      console.log(instance);
     };
     const { setup } = ElInput;
     return setup(props, ctx);
