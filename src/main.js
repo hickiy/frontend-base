@@ -1,6 +1,6 @@
 import { createApp } from 'vue';
 import Cookies from 'js-cookie';
-import ElementPlus from 'element-plus';
+import ElementPlus from '@/element-plus';
 import locale from 'element-plus/lib/locale/lang/zh-cn'; // 中文语言
 import '@/assets/styles/index.scss'; // global css
 import App from './App';
@@ -34,8 +34,6 @@ import ImagePreview from '@/components/ImagePreview';
 import TreeSelect from '@/components/TreeSelect';
 // 字典标签组件
 import DictTag from '@/components/DictTag';
-// 输入框组件
-import Input from '@/components/Input';
 
 // 创建应用
 const app = createApp(App);
@@ -48,8 +46,6 @@ app.use(ElementPlus, {
   // 支持 large、default、small
   size: Cookies.get('size') || 'default'
 });
-// 基于elment-plus自定义扩展组件挂载
-app.component('ElInput', Input);
 
 // 全局自定义组件挂载
 app.component('DictTag', DictTag);

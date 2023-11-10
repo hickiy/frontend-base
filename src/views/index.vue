@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-input v-model="a" :decimal="2"></el-input>    
+    <el-input v-model="a" type="number" :decimal="2"></el-input>    
   </div>
 </template>
 
