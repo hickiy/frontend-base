@@ -1,6 +1,7 @@
 /*  hickey 2023/11/7 */
-import { ElUpload } from 'element-plus';
+import { ElUpload, ElMessage } from 'element-plus';
 import request from '@/utils/request';
+import { getCurrentInstance } from 'vue';
 export default {
   ...ElUpload,
   props: {
@@ -9,9 +10,47 @@ export default {
       type: String,
       default: '/file/upload'
     },
+    beforeUpload: {
+      default(props) {
+        const instance = getCurrentInstance();
+        return function (file) {
+          // 当多个文件同时上传时，设置一个宏任务，在本次微任务循环结束执行，避免当多个文件验证不通过时，弹出多次验证弹窗问题
+          instance.beforeUploadMsg = [];
+          if (!instance.timer) {
+            instance.timer = window.setTimeout(() => {
+              if (instance.beforeUploadMsg?.length) {
+                ElMessage.warning(instance.beforeUploadMsg[0]);
+                instance.beforeUploadMsg = [];
+              }
+              window.clearTimeout(instance.timer);
+              instance.timer = null;
+            }, 0);
+          }
+          let regStr = `.(${props.accept.replace(/(,\s+)/g, '|').replace(/\./g, '')})$`;
+          const lastFile = props.fileList.length >= 2 ? props.fileList[props.fileList.length - 2] : null;
+          // 文件校验逻辑
+          if (!new RegExp(regStr, 'i').test(file.name)) {
+            instance.beforeUploadMsg.push('文件类型不正确!');
+          } else if (file.size > instance.limitSize * 1024 * 1024) {
+            instance.beforeUploadMsg.push(`文件超过${instance.limitSize}M!`);
+          } else if (lastFile) {
+            // 处理后台文件返回的fileName,没有返回name的兼容问题
+            const name = lastFile.name || lastFile.fileName || '';
+            const lastFileType = name ? name.replace(/^.+\./, '').toLowerCase() : '';
+            const nextFileType = file.name.replace(/^.+\./, '').toLowerCase();
+            if (/(pdf|zip|ofd)/i.test(lastFileType)) {
+              if (lastFileType != nextFileType) instance.beforeUploadMsg.push(`${lastFileType}类型文件不能与${nextFileType}类型文件混传`);
+            } else if (/(pdf|zip|ofd)/i.test(nextFileType)) {
+              instance.beforeUploadMsg.push(`图片类型文件不能与${nextFileType}类型文件混传`);
+            }
+          }
+          return !instance.beforeUploadMsg.length;
+        };
+      }
+    },
     httpRequest: {
       type: Function,
-      default: (option) => {
+      default(option) {
         const formData = new FormData();
         if (option.data) {
           for (const [key, value] of Object.entries(option.data)) {
