@@ -10,6 +10,39 @@ export default {
       type: String,
       default: '/file/upload'
     },
+    httpRequest: {
+      type: Function,
+      default(option) {
+        const formData = new FormData();
+        if (option.data) {
+          for (const [key, value] of Object.entries(option.data)) {
+            if (isArray(value) && value.length) formData.append(key, ...value);
+            else formData.append(key, value);
+          }
+        }
+        formData.append(option.filename, option.file, option.file.name);
+        request({
+          url: option.action,
+          method: 'post',
+          data: formData,
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            ...option.headers
+          },
+          withCredentials: option.withCredentials,
+          onUploadProgress(evt) {
+            evt.percent = evt.total > 0 ? (evt.loaded / evt.total) * 100 : 0;
+            option.onProgress(evt);
+          }
+        })
+          .then((res) => {
+            option.onSuccess(res.data);
+          })
+          .catch((err) => {
+            option.onError(err);
+          });
+      }
+    },
     beforeUpload: {
       default(props) {
         const instance = getCurrentInstance();
@@ -48,38 +81,50 @@ export default {
         };
       }
     },
-    httpRequest: {
-      type: Function,
-      default(option) {
-        const formData = new FormData();
-        if (option.data) {
-          for (const [key, value] of Object.entries(option.data)) {
-            if (isArray(value) && value.length) formData.append(key, ...value);
-            else formData.append(key, value);
-          }
-        }
-        formData.append(option.filename, option.file, option.file.name);
-        return request({
-          url: option.action,
-          method: 'post',
-          data: formData,
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            ...option.headers
-          },
-          withCredentials: option.withCredentials,
-          onUploadProgress(evt) {
-            evt.percent = evt.total > 0 ? (evt.loaded / evt.total) * 100 : 0;
-            option.onProgress(evt);
-          }
-        })
-          .then((res) => {
-            option.onSuccess(res);
-          })
-          .catch((err) => {
-            option.onError(err);
-          });
+    onSuccess: {
+      default(props) {
+        return (res, file, fileList) => {
+          // TODO In vue3.0 support v-model, so no need to self-dispose the fileList prop, 
+          // but we need to compatible the property of fileUrl、fileName、limitSize、fileSuffix and url
+          
+          // let data = res.data;
+          // (file.fileName = data.name), (file.fileUrl = data.url), (file.limitSize = data.size), (file.fileSuffix = data.type), (file.url = data.url);
+          // if (this.fileList.length != fileList.length) {
+          //   this.fileList.splice(0, this.fileList.length, ...fileList);
+          // }
+
+          // TODO In vue3.0 dispatch is not exist, so we need to find another way to emit the event for ElFormItem
+          // setTimeout(this.dispatch, 0, 'ElFormItem', 'el.form.change');
+        };
+      }
+    },
+    onError: {
+      default(props) {
+        const instance = getCurrentInstance();
+        return (err) => {
+          // 上传失败时，删除上传的文件
+          ElMessage.error(err.msg || '文件上传失败');
+          // TODO In vue3.0 dispatch is not exist, so we need to find another way to emit the event for ElFormItem
+          // console.log(instance.dispatch);
+          // setTimeout(instance.dispatch, 0, 'ElFormItem', 'el.form.change');
+        };
+      }
+    },
+    onExceed: {
+      default(props) {
+        return (files, fileList) => {
+          ElMessage.warning(`最多上传${props.limit}个文件`);
+        };
+      }
+    },
+    onRemove: {
+      default(props) {
+        return (file, fileList) => {
+          // TODO In vue3.0 dispatch is not exist, so we need to find another way to emit the event for ElFormItem
+          // setTimeout(this.dispatch, 0, 'ElFormItem', 'el.form.change');
+        };
       }
     }
   }
+  // TODO self-defined the views of the file list and upload progress
 };
