@@ -1,7 +1,8 @@
 /*  hickey 2023/11/7 */
-import { ElUpload, ElMessage } from 'element-plus';
+import { ElUpload, ElMessage, useFormItem } from 'element-plus';
 import request from '@/utils/request';
 import { getCurrentInstance } from 'vue';
+
 export default {
   ...ElUpload,
   props: {
@@ -83,18 +84,10 @@ export default {
     },
     onSuccess: {
       default(props) {
+        const instance = getCurrentInstance();
         return (res, file, fileList) => {
-          // TODO In vue3.0 support v-model, so no need to self-dispose the fileList prop, 
-          // but we need to compatible the property of fileUrl、fileName、limitSize、fileSuffix and url
-          
-          // let data = res.data;
-          // (file.fileName = data.name), (file.fileUrl = data.url), (file.limitSize = data.size), (file.fileSuffix = data.type), (file.url = data.url);
-          // if (this.fileList.length != fileList.length) {
-          //   this.fileList.splice(0, this.fileList.length, ...fileList);
-          // }
-
-          // TODO In vue3.0 dispatch is not exist, so we need to find another way to emit the event for ElFormItem
-          // setTimeout(this.dispatch, 0, 'ElFormItem', 'el.form.change');
+          console.log(res, file, fileList);
+          instance.formItem?.validate?.('input');
         };
       }
     },
@@ -102,11 +95,7 @@ export default {
       default(props) {
         const instance = getCurrentInstance();
         return (err) => {
-          // 上传失败时，删除上传的文件
-          ElMessage.error(err.msg || '文件上传失败');
-          // TODO In vue3.0 dispatch is not exist, so we need to find another way to emit the event for ElFormItem
-          // console.log(instance.dispatch);
-          // setTimeout(instance.dispatch, 0, 'ElFormItem', 'el.form.change');
+          console.log(err);
         };
       }
     },
@@ -119,12 +108,18 @@ export default {
     },
     onRemove: {
       default(props) {
+        const instance = getCurrentInstance();
         return (file, fileList) => {
-          // TODO In vue3.0 dispatch is not exist, so we need to find another way to emit the event for ElFormItem
-          // setTimeout(this.dispatch, 0, 'ElFormItem', 'el.form.change');
+          instance.formItem?.validate?.('input');
         };
       }
     }
+  },
+  setup(props, ctx) {
+    const { form, formItem } = useFormItem();
+    var instance = getCurrentInstance();
+    instance.formItem = formItem;
+    instance.form = form;
+    return ElUpload.setup(props, ctx);
   }
-  // TODO self-defined the views of the file list and upload progress
 };
