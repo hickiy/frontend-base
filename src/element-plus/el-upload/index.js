@@ -83,33 +83,30 @@ export default {
       }
     },
     onSuccess: {
-      default(props) {
+      default() {
         const instance = getCurrentInstance();
         return (res, file, fileList) => {
-          console.log(res, file, fileList);
+          fileList.splice(fileList.indexOf(file), 1, { ...res, url: file.url });
           instance.formItem?.validate?.('input');
         };
       }
     },
     onError: {
-      default(props) {
-        const instance = getCurrentInstance();
-        return (err) => {
-          console.log(err);
-        };
+      type: Function,
+      default(err) {
+        ElMessage.error(err.msg || '文件上传失败');
       }
     },
     onExceed: {
-      default(props) {
-        return (files, fileList) => {
-          ElMessage.warning(`最多上传${props.limit}个文件`);
-        };
+      type: Function,
+      default(file, fileList) {
+        ElMessage.warning(`最多上传${fileList?.length}个文件`);
       }
     },
     onRemove: {
-      default(props) {
+      default() {
         const instance = getCurrentInstance();
-        return (file, fileList) => {
+        return () => {
           instance.formItem?.validate?.('input');
         };
       }

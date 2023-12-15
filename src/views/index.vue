@@ -2,7 +2,7 @@
   <div>
     <el-form :model="form">
       <el-form-item label="附件上传" prop="fileList" :rules="[{ required: true, type: 'array', min: 1, message: 'xxxxx' }]">
-        <el-upload v-model:file-list="form.fileList" list-type="picture-card" accept=".png">
+        <el-upload v-model:file-list="form.fileList" :limit="1" list-type="picture-card" accept=".png">
           <el-icon><Plus /></el-icon>
         </el-upload>
       </el-form-item>
@@ -19,10 +19,7 @@ export default {
   data() {
     return {
       form: {
-        fileList: [{
-          name: 'food.jpeg',
-          url: 'https://xxx.cdn.com/xxx.png'
-        }]
+        fileList: []
       }
     };
   }
