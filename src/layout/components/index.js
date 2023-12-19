@@ -1,3 +1,3 @@
-export { default as AppMain } from './AppMain'
-export { default as Navbar } from './Navbar'
-export { default as Settings } from './Settings'
+export { default as AppMain } from './AppMain.vue'
+export { default as Navbar } from './Navbar.vue'
+export { default as Settings } from './Settings/index.vue'

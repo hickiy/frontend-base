@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="w-full h-full bg-#fff p-10px">
     <el-form :model="form">
       <el-form-item label="附件上传" prop="fileList" :rules="[{ required: true, type: 'array', min: 1, message: 'xxxxx' }]">
         <el-upload v-model:file-list="form.fileList" :limit="1" list-type="picture-card" accept=".png">

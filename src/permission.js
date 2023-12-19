@@ -1,7 +1,6 @@
 import router from './router';
 import { ElMessage } from 'element-plus';
 import NProgress from 'nprogress';
-import 'nprogress/nprogress.css';
 import { getToken } from '@/utils/auth';
 import { isHttp } from '@/utils/validate';
 import { isRelogin } from '@/utils/request';
