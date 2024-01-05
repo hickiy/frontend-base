@@ -1,12 +1,8 @@
 <template>
   <div class="w-full h-full bg-#fff p-10px">
-    <el-form :model="form">
-      <el-form-item label="附件上传" prop="fileList" :rules="[{ required: true, type: 'array', min: 1, message: 'xxxxx' }]">
-        <el-upload v-model:file-list="form.fileList" :limit="1" list-type="picture-card" accept=".png">
-          <el-icon><Plus /></el-icon>
-        </el-upload>
-      </el-form-item>
-    </el-form>
+    <el-table :data="list" title="测试列表" :setTable="[]">
+      <el-table-column label="序号"></el-table-column>
+    </el-table>
   </div>
 </template>
 
@@ -18,9 +14,7 @@ export default {
   },
   data() {
     return {
-      form: {
-        fileList: []
-      }
+      list: []
     };
   }
 };

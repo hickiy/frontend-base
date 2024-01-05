@@ -1,6 +1,6 @@
 <template>
   <div class="flex-1 overflow-y-auto bg-#f2f3f5 p-10px">
-    <router-view v-slot="{ Component, route }">
+    <router-view #default="{ Component, route }">
       <transition name="fade-transform" mode="out-in">
         <keep-alive :include="tagsViewStore.cachedViews">
           <component v-if="!route.meta.link" :is="Component" :key="route.path" />
