@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-import useSettingsStore from '@/store/modules/settings'
+import useSettingsStore from '@/store/modules/app'
 import { handleThemeStyle } from '@/utils/theme'
 
 onMounted(() => {

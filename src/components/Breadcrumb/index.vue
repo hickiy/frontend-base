@@ -1,5 +1,5 @@
 <template>
-  <el-breadcrumb class="app-breadcrumb" separator="/">
+  <el-breadcrumb id="breadcrumb-container" class="breadcrumb-container app-breadcrumb w-full ml-15px" separator="/">
     <transition-group name="breadcrumb">
       <el-breadcrumb-item v-for="(item, index) in levelList" :key="item.path">
         <span v-if="item.redirect === 'noRedirect' || index == levelList.length - 1" class="no-redirect">{{ item.meta.title }}</span>
@@ -17,13 +17,7 @@ const router = useRouter();
 const levelList = ref([]);
 
 function getBreadcrumb() {
-  // only show routes with meta.title
   let matched = route.matched;
-  // const first = matched[0];
-  // 判断是否为首页
-  // if (!isDashboard(first)) {
-  //   matched = [{ path: '/index', meta: { title: '首页' } }].concat(matched);
-  // }
   if (route.meta && route.meta.breadcrumb !== false && levelList.value.some((item) => item.path.startsWith(route.meta.activeMenu))) {
     let index = levelList.value.findIndex((item) => item.path == route.path);
     if (index > -1) {
@@ -41,14 +35,6 @@ function cacheBreadcrumb() {
 }
 
 window.addEventListener('beforeunload', cacheBreadcrumb);
-
-// function isDashboard(route) {
-//   const name = route && route.name;
-//   if (!name) {
-//     return false;
-//   }
-//   return name.trim() === 'Index';
-// }
 
 function handleLink(item) {
   const { redirect, path } = item;
@@ -83,8 +69,7 @@ onBeforeUnmount(() => {
 .app-breadcrumb.el-breadcrumb {
   display: inline-block;
   font-size: 14px;
-  line-height: 50px;
-
+  line-height: 40px;
   .no-redirect {
     color: #97a8be;
     cursor: text;

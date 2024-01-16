@@ -1,8 +1,11 @@
 <template>
   <div
-    class="sidebar-wrap"
+    class="sidebar-container sidebar-wrap h-full"
     :class="{ 'has-logo': showLogo }"
-    :style="{ backgroundColor: sideTheme === 'theme-dark' ? variables.menuBackground : variables.menuLightBackground }"
+    :style="{
+      backgroundColor: sideTheme === 'theme-dark' ? variables.menuBackground : variables.menuLightBackground,
+      width: !isCollapse ? variables.sideBarWidth : variables.sideBarMiniWidth
+    }"
   >
     <el-scrollbar :class="sideTheme" wrap-class="scrollbar-wrapper">
       <el-menu
@@ -15,18 +18,23 @@
         :collapse-transition="false"
         mode="vertical"
       >
-        <sidebar-item v-for="(route, index) in sidebarRouters" :key="route.path + index" :item="route" :base-path="route.path" />
+        <sidebar-item
+          v-for="(route, index) in sidebarRouters"
+          :key="route.path + index"
+          :item="route"
+          :base-path="route.path"
+          :isCollapse="!isCollapse"
+        />
       </el-menu>
     </el-scrollbar>
   </div>
 </template>
 
 <script setup>
-import Logo from './Logo';
 import SidebarItem from './SidebarItem';
 import variables from '@/assets/styles/variables.module.scss';
 import useAppStore from '@/store/modules/app';
-import useSettingsStore from '@/store/modules/settings';
+import useSettingsStore from '@/store/modules/app';
 import usePermissionStore from '@/store/modules/permission';
 
 const route = useRoute();
@@ -42,7 +50,6 @@ const isCollapse = computed(() => !appStore.sidebar.opened);
 
 const activeMenu = computed(() => {
   const { meta, path } = route;
-  // if set path, the sidebar will highlight the path you set
   if (meta.activeMenu) {
     return meta.activeMenu;
   }
@@ -79,12 +86,6 @@ const activeMenu = computed(() => {
 
   .is-horizontal {
     display: none;
-  }
-
-  a {
-    display: inline-block;
-    width: 100%;
-    overflow: hidden;
   }
 
   .svg-icon {

@@ -1,9 +1,6 @@
 @import './variables.module.scss';
-@import './mixin.scss';
 @import './transition.scss';
 @import './element-ui.scss';
-@import './btn.scss';
-@import './ruoyi.scss';
 
 *,
 *:before,
@@ -54,44 +51,3 @@ a:hover {
 div:focus {
   outline: none;
 }
-
-.fr {
-  float: right;
-}
-
-.fl {
-  float: left;
-}
-
-.pr-5 {
-  padding-right: 5px;
-}
-
-.pl-5 {
-  padding-left: 5px;
-}
-
-.block {
-  display: block;
-}
-
-.pointer {
-  cursor: pointer;
-}
-
-.inlineBlock {
-  display: block;
-}
-
-.clearfix {
-  &:after {
-    visibility: hidden;
-    display: block;
-    font-size: 0;
-    content: ' ';
-    clear: both;
-    height: 0;
-  }
-}
-
-

@@ -1,5 +1,5 @@
 import { ElTable as Table, ElTooltip as Tooltip, ElButton as Button } from 'element-plus';
-import TableSetting from './table-setting.vue';
+import Prepend from './prepend.vue';
 import { h } from 'vue';
 export default {
   name: Table.name,
@@ -18,11 +18,6 @@ export default {
     return {
       tooltipContent: ''
     };
-  },
-  mounted() {
-    if (Array.isArray(this.setTable)) {
-      this.$refs['table-setting'].setColumns(this.$slots.default());
-    }
   },
   activated() {
     this.originTable.doLayout();
@@ -64,7 +59,7 @@ export default {
   render() {
     // table设置面板
     const setting = h(
-      TableSetting,
+      Prepend,
       {
         title: this.title,
         setTable: this.setTable,
@@ -76,7 +71,6 @@ export default {
     );
 
     // el-table组件
-
     const table = h(
       Table,
       {

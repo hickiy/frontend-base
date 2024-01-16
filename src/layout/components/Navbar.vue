@@ -1,6 +1,11 @@
 <template>
   <div class="navbar">
-    <hamburger id="hamburger-container" :is-active="appStore.sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
+    <hamburger
+      id="hamburger-container"
+      class="hamburger-container cursor-pointer"
+      :is-active="!appStore.sidebar.opened"
+      @toggleClick="toggleSideBar"
+    />
     <div class="right-menu">
       <div class="avatar-container">
         <el-dropdown @command="handleCommand" class="right-menu-item hover-effect" trigger="click">
@@ -31,7 +36,7 @@ import { ElMessageBox } from 'element-plus';
 import Hamburger from '@/components/Hamburger';
 import useAppStore from '@/store/modules/app';
 import useUserStore from '@/store/modules/user';
-import useSettingsStore from '@/store/modules/settings';
+import useSettingsStore from '@/store/modules/app';
 
 const appStore = useAppStore();
 const userStore = useUserStore();

@@ -4,15 +4,15 @@
       <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path, onlyOneChild.query)">
         <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{ 'submenu-title-noDropdown': !isNest }">
           <svg-icon :icon-class="onlyOneChild.meta.icon || (item.meta && item.meta.icon)" />
-          <template #title
-            ><span class="menu-title" :title="hasTitle(onlyOneChild.meta.title)">{{ onlyOneChild.meta.title }}</span></template
-          >
+          <template #title>
+            <span class="menu-title" :title="hasTitle(onlyOneChild.meta.title)">{{ onlyOneChild.meta.title }}</span>
+          </template>
         </el-menu-item>
       </app-link>
     </template>
 
     <el-sub-menu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body>
-      <template v-if="item.meta" #title>
+      <template v-if="item.meta && isCollapse" #title>
         <svg-icon :icon-class="item.meta && item.meta.icon" />
         <span class="menu-title" :title="hasTitle(item.meta.title)">{{ item.meta.title }}</span>
       </template>
@@ -32,7 +32,17 @@
 <script setup>
 import { isExternal } from '@/utils/validate';
 import AppLink from './Link';
-import { getNormalPath } from '@/utils/ruoyi';
+// 返回项目路径
+function getNormalPath(p) {
+  if (p.length === 0 || !p || p == 'undefined') {
+    return p;
+  }
+  let res = p.replace('//', '/');
+  if (res[res.length - 1] === '/') {
+    return res.slice(0, res.length - 1);
+  }
+  return res;
+}
 
 const props = defineProps({
   // route object
@@ -47,6 +57,10 @@ const props = defineProps({
   basePath: {
     type: String,
     default: ''
+  },
+  isCollapse: {
+    type: Boolean,
+    default: false
   }
 });
 

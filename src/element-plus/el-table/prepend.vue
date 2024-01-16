@@ -1,19 +1,27 @@
 <template>
   <div class="el-table-setting flex">
-    <div v-if="title" class="title fs16 fw-b">{{ title }}</div>
+    <div v-if="title" class="title fw-b">{{ title }}</div>
     <div class="flex flex-row grow justify-end">
       <slot></slot>
       <div class="setting flex flex-row items-center justify-center cursor-pointer">
-        <el-popover placement="bottom-start" width="240" trigger="click">
+        <el-popover placement="bottom-start" width="150" trigger="click">
           <template #reference>
             <el-icon :size="22">
               <Tools />
             </el-icon>
           </template>
           <div class="popover-title">列表展示信息</div>
-          <el-checkbox class="mb15" :indeterminate="true">全部（{{ ids.length + '/' + columns.length }}项）</el-checkbox>
-          <el-checkbox-group v-model="ids" class="fl-c">
-            <el-checkbox v-for="(c, i) in columns" :label="c.id" :key="c.id" :disabled="checkin(c)" :checked="true">{{ c.props.label }}</el-checkbox>
+          <el-checkbox :indeterminate="true">全部（{{ ids.length + '/' + columns.length }}项）</el-checkbox>
+          <el-checkbox-group v-model="ids">
+            <el-checkbox
+              v-for="(c, i) in columns"
+              :label="c.id"
+              :key="c.id"
+              :disabled="!!c.fixed || c.type != 'default'"
+              :checked="true"
+              @change="columnChange($event, c)"
+              >{{ c.label }}</el-checkbox
+            >
           </el-checkbox-group>
         </el-popover>
       </div>
@@ -31,22 +39,16 @@ export default {
       ids: []
     };
   },
-  computed: {
-    canSet() {
-      return Array.isArray(this.setTable);
-    }
+  mounted() {
+    this.$nextTick(() => {
+      this.columns = [...this.$parent.$refs['origin-table']?.store?.states?._columns.value];
+    });
   },
   methods: {
-    checkin(col) {
-      return !!col.fixed || !col.property || col.type != 'default' || !col.canFilter;
-    },
-    setColumns(columns) {
-      this.columns = columns;
-    },
-    columnChange(val, col, index) {
+    columnChange(val, col) {
       const store = this.$parent.$refs['origin-table'].store;
       if (val) {
-        store.commit('insertColumn', col, index, null);
+        store.commit('insertColumn', col, null);
       } else {
         store.commit('removeColumn', col, null);
       }
@@ -76,6 +78,5 @@ export default {
   font-size: 16px;
   font-weight: 400;
   color: #86909c;
-  margin-bottom: 25px;
 }
 </style>

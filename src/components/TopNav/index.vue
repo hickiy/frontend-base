@@ -35,7 +35,7 @@
 import { constantRoutes } from "@/router"
 import { isHttp } from '@/utils/validate'
 import useAppStore from '@/store/modules/app'
-import useSettingsStore from '@/store/modules/settings'
+import useSettingsStore from '@/store/modules/app'
 import usePermissionStore from '@/store/modules/permission'
 
 // 顶部栏初始数
