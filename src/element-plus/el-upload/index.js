@@ -11,39 +11,6 @@ export default {
       type: String,
       default: '/file/upload'
     },
-    httpRequest: {
-      type: Function,
-      default(option) {
-        const formData = new FormData();
-        if (option.data) {
-          for (const [key, value] of Object.entries(option.data)) {
-            if (isArray(value) && value.length) formData.append(key, ...value);
-            else formData.append(key, value);
-          }
-        }
-        formData.append(option.filename, option.file, option.file.name);
-        request({
-          url: option.action,
-          method: 'post',
-          data: formData,
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            ...option.headers
-          },
-          withCredentials: option.withCredentials,
-          onUploadProgress(evt) {
-            evt.percent = evt.total > 0 ? (evt.loaded / evt.total) * 100 : 0;
-            option.onProgress(evt);
-          }
-        })
-          .then((res) => {
-            option.onSuccess(res.data);
-          })
-          .catch((err) => {
-            option.onError(err);
-          });
-      }
-    },
     beforeUpload: {
       default(props) {
         const instance = getCurrentInstance();
@@ -86,7 +53,7 @@ export default {
       default() {
         const instance = getCurrentInstance();
         return (res, file, fileList) => {
-          fileList.splice(fileList.indexOf(file), 1, { ...res, url: file.url });
+          fileList.splice(fileList.indexOf(file), 1, { ...res.data, url: file.url });
           instance.formItem?.validate?.('input');
         };
       }
@@ -109,6 +76,39 @@ export default {
         return () => {
           instance.formItem?.validate?.('input');
         };
+      }
+    },
+    httpRequest: {
+      type: Function,
+      default(option) {
+        const formData = new FormData();
+        if (option.data) {
+          for (const [key, value] of Object.entries(option.data)) {
+            if (isArray(value) && value.length) formData.append(key, ...value);
+            else formData.append(key, value);
+          }
+        }
+        formData.append(option.filename, option.file, option.file.name);
+        request({
+          url: option.action,
+          method: 'post',
+          data: formData,
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            ...option.headers
+          },
+          withCredentials: option.withCredentials,
+          onUploadProgress(evt) {
+            evt.percent = evt.total > 0 ? (evt.loaded / evt.total) * 100 : 0;
+            option.onProgress(evt);
+          }
+        })
+          .then((res) => {
+            option.onSuccess(res);
+          })
+          .catch((err) => {
+            option.onError(err);
+          });
       }
     }
   },
