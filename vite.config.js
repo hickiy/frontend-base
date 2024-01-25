@@ -3,6 +3,7 @@ import path from 'path';
 import createVitePlugins from './vite';
 import autoprefixer from 'autoprefixer';
 import UnoCSS from 'unocss/vite';
+import { presetIcons } from 'unocss';
 
 export default defineConfig(({ mode, command }) => {
   const env = loadEnv(mode, process.cwd());
@@ -11,7 +12,12 @@ export default defineConfig(({ mode, command }) => {
     // 部署生产环境和开发环境下的URL。
     // 默认情况下，vite 会假设你的应用是被部署在一个域名的根路径上
     base: VITE_APP_ENV === 'production' ? '/' : '/',
-    plugins: [...createVitePlugins(env, command === 'build'), UnoCSS()],
+    plugins: [
+      ...createVitePlugins(env, command === 'build'),
+      UnoCSS({
+        presets: [presetIcons()]
+      })
+    ],
     resolve: {
       alias: {
         // 设置路径

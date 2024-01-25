@@ -3,7 +3,7 @@
     <hamburger
       id="hamburger-container"
       class="hamburger-container cursor-pointer"
-      :is-active="!appStore.sidebar.opened"
+      :is-active="appStore.sidebar.opened"
       @toggleClick="toggleSideBar"
     />
     <div class="right-menu">
@@ -17,8 +17,10 @@
               <router-link to="/user/profile">
                 <el-dropdown-item>个人中心</el-dropdown-item>
               </router-link>
-              <el-dropdown-item command="setLayout" v-if="settingsStore.showSettings">
-                <span>布局设置</span>
+              <el-dropdown-item command="setting">
+                <router-link to="/system">
+                  <span>设置</span>
+                </router-link>
               </el-dropdown-item>
               <el-dropdown-item divided command="logout">
                 <span>退出登录</span>
@@ -48,9 +50,6 @@ function toggleSideBar() {
 
 function handleCommand(command) {
   switch (command) {
-    case 'setLayout':
-      setLayout();
-      break;
     case 'logout':
       logout();
       break;
@@ -71,11 +70,6 @@ function logout() {
       });
     })
     .catch(() => {});
-}
-
-const emits = defineEmits(['setLayout']);
-function setLayout() {
-  emits('setLayout');
 }
 </script>
 

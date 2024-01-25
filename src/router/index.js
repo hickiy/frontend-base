@@ -182,7 +182,7 @@ export const dynamicRoutes = [
 
 const router = createRouter({
   history: createWebHistory(),
-  routes: constantRoutes,
+  routes: constantRoutes.concat(dynamicRoutes),
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
       return savedPosition;
