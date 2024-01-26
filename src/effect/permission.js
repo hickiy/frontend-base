@@ -1,4 +1,4 @@
-import router from './index';
+import router from '../router/index';
 import { ElMessage } from 'element-plus';
 import NProgress from 'nprogress';
 import { getToken } from '@/utils/auth';

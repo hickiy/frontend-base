@@ -35,8 +35,7 @@ const usePermissionStore = defineStore('permission', {
         // 向后端请求路由数据
         getRouters().then((res) => {
           // 基于系统appKey过滤菜单
-          let routes = res.data;
-          routes = routes.filter((route) => route.moduleId == '2');
+          let routes = res.data.filter(route => route.moduleId == 1);
           // 后端数据响应式路由
           const sdata = JSON.parse(JSON.stringify(routes));
           const rdata = JSON.parse(JSON.stringify(routes));
