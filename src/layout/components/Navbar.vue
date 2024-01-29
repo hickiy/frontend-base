@@ -18,7 +18,7 @@
                 <el-dropdown-item>个人中心</el-dropdown-item>
               </router-link>
               <el-dropdown-item command="setting">
-                <router-link to="/system">
+                <router-link to="/system/user">
                   <span>设置</span>
                 </router-link>
               </el-dropdown-item>
