@@ -4,6 +4,7 @@
   "description": "team cli project",
   "author": "hickey",
   "license": "MIT",
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build:prod": "vite build",
