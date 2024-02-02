@@ -270,13 +270,13 @@ function submitForm() {
     if (valid) {
       if (form.value.dictId != undefined) {
         updateType(form.value).then(response => {
-          proxy.$modal.msgSuccess("修改成功");
+          proxy.$modal.success("修改成功");
           open.value = false;
           getList();
         });
       } else {
         addType(form.value).then(response => {
-          proxy.$modal.msgSuccess("新增成功");
+          proxy.$modal.success("新增成功");
           open.value = false;
           getList();
         });
@@ -291,7 +291,7 @@ function handleDelete(row) {
     return delType(dictIds);
   }).then(() => {
     getList();
-    proxy.$modal.msgSuccess("删除成功");
+    proxy.$modal.success("删除成功");
   }).catch(() => {});
 }
 /** 导出按钮操作 */
@@ -303,7 +303,7 @@ function handleExport() {
 /** 刷新缓存按钮操作 */
 function handleRefreshCache() {
   refreshCache().then(() => {
-    proxy.$modal.msgSuccess("刷新成功");
+    proxy.$modal.success("刷新成功");
     useDictStore().cleanDict();
   });
 }

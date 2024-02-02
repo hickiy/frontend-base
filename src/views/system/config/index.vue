@@ -264,13 +264,13 @@ function submitForm() {
     if (valid) {
       if (form.value.configId != undefined) {
         updateConfig(form.value).then(response => {
-          proxy.$modal.msgSuccess("修改成功");
+          proxy.$modal.success("修改成功");
           open.value = false;
           getList();
         });
       } else {
         addConfig(form.value).then(response => {
-          proxy.$modal.msgSuccess("新增成功");
+          proxy.$modal.success("新增成功");
           open.value = false;
           getList();
         });
@@ -285,7 +285,7 @@ function handleDelete(row) {
     return delConfig(configIds);
   }).then(() => {
     getList();
-    proxy.$modal.msgSuccess("删除成功");
+    proxy.$modal.success("删除成功");
   }).catch(() => {});
 }
 /** 导出按钮操作 */
@@ -297,7 +297,7 @@ function handleExport() {
 /** 刷新缓存按钮操作 */
 function handleRefreshCache() {
   refreshCache().then(() => {
-    proxy.$modal.msgSuccess("刷新缓存成功");
+    proxy.$modal.success("刷新缓存成功");
   });
 }
 

@@ -23,36 +23,27 @@
         <el-input v-model="queryParams.isDefault" placeholder="请输入默认模块" clearable @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        <el-button type="primary" icon="el-icon-search" @click="handleQuery">搜索</el-button>
+        <el-button icon="el-icon-refresh" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-        <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleAdd" v-hasPermi="['system:module:add']">新增</el-button>
+        <el-button type="primary" plain icon="el-icon-plus" @click="handleAdd" v-hasPermi="['system:module:add']">新增</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="success" plain icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdate" v-hasPermi="['system:module:edit']"
+        <el-button type="success" plain icon="el-icon-edit" :disabled="single" @click="handleUpdate" v-hasPermi="['system:module:edit']"
           >修改</el-button
         >
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['system:module:remove']"
+        <el-button type="danger" plain icon="el-icon-delete" :disabled="multiple" @click="handleDelete" v-hasPermi="['system:module:remove']"
           >删除</el-button
         >
       </el-col>
       <el-col :span="1.5">
-        <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport" v-hasPermi="['system:module:export']"
-          >导出</el-button
-        >
+        <el-button type="warning" plain icon="el-icon-download" @click="handleExport" v-hasPermi="['system:module:export']">导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -77,10 +68,8 @@
       <el-table-column label="默认模块" align="center" prop="isDefault" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:module:edit']">修改</el-button>
-          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)" v-hasPermi="['system:module:remove']"
-            >删除</el-button
-          >
+          <el-button text icon="el-icon-edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:module:edit']">修改</el-button>
+          <el-button text icon="el-icon-delete" @click="handleDelete(scope.row)" v-hasPermi="['system:module:remove']">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -94,7 +83,6 @@
           <el-input v-model="form.moduleName" placeholder="请输入模块名称" />
         </el-form-item>
         <el-form-item label="模块logo" prop="logo">
-          <!-- <el-input v-model="form.logo" type="textarea" placeholder="请输入内容" /> -->
           <ImageUpload :limit="1" :value="form.logo" @input="uploaded" />
         </el-form-item>
         <el-form-item label="路由地址" prop="path">
@@ -193,8 +181,8 @@ export default {
     this.getList();
   },
   methods: {
-    uploaded(logo){
-      this.form.logo=logo
+    uploaded(logo) {
+      this.form.logo = logo;
     },
     /** 查询模块信息列表 */
     getList() {
@@ -275,7 +263,7 @@ export default {
           return updateModule(row.moduleId, row.status);
         })
         .then(() => {
-          this.$modal.msgSuccess(text + '成功');
+          this.$modal.success(text + '成功');
         })
         .catch(function () {
           row.status = row.status === '0' ? '1' : '0';
@@ -287,13 +275,13 @@ export default {
         if (valid) {
           if (this.form.moduleId != null) {
             updateModuleInfo(this.form).then((response) => {
-              this.$modal.msgSuccess('修改成功');
+              this.$modal.success('修改成功');
               this.open = false;
               this.getList();
             });
           } else {
             addModule(this.form).then((response) => {
-              this.$modal.msgSuccess('新增成功');
+              this.$modal.success('新增成功');
               this.open = false;
               this.getList();
             });
@@ -311,7 +299,7 @@ export default {
         })
         .then(() => {
           this.getList();
-          this.$modal.msgSuccess('删除成功');
+          this.$modal.success('删除成功');
         })
         .catch(() => {});
     },

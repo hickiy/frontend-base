@@ -241,7 +241,7 @@ function handleDelete(row) {
     return delJobLog(ids.value);
   }).then(() => {
     getList();
-    proxy.$modal.msgSuccess("删除成功");
+    proxy.$modal.success("删除成功");
   }).catch(() => {});
 }
 /** 清空按钮操作 */
@@ -250,7 +250,7 @@ function handleClean() {
     return cleanJobLog();
   }).then(() => {
     getList();
-    proxy.$modal.msgSuccess("清空成功");
+    proxy.$modal.success("清空成功");
   }).catch(() => {});
 }
 /** 导出按钮操作 */

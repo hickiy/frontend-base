@@ -129,7 +129,7 @@ export default {
           this.open = false;
           this.options.img = response.imgUrl;
           store.commit('SET_AVATAR', this.options.img);
-          this.$modal.msgSuccess('修改成功');
+          this.$modal.success('修改成功');
           this.visible = false;
         });
       });

@@ -11,7 +11,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup name="Layout">
 import Sidebar from './components/Sidebar/index.vue';
 import Breadcrumb from '@/components/Breadcrumb/index.vue';
 import { AppMain, Navbar } from './components';

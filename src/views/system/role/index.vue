@@ -323,7 +323,7 @@ function handleDelete(row) {
     return delRole(roleIds);
   }).then(() => {
     getList();
-    proxy.$modal.msgSuccess("删除成功");
+    proxy.$modal.success("删除成功");
   }).catch(() => {});
 }
 /** 导出按钮操作 */
@@ -344,7 +344,7 @@ function handleStatusChange(row) {
   proxy.$modal.confirm('确认要"' + text + '""' + row.roleName + '"角色吗?').then(function () {
     return changeRoleStatus(row.roleId, row.status);
   }).then(() => {
-    proxy.$modal.msgSuccess(text + "成功");
+    proxy.$modal.success(text + "成功");
   }).catch(function () {
     row.status = row.status === "0" ? "1" : "0";
   });
@@ -493,14 +493,14 @@ function submitForm() {
       if (form.value.roleId != undefined) {
         form.value.menuIds = getMenuAllCheckedKeys();
         updateRole(form.value).then(response => {
-          proxy.$modal.msgSuccess("修改成功");
+          proxy.$modal.success("修改成功");
           open.value = false;
           getList();
         });
       } else {
         form.value.menuIds = getMenuAllCheckedKeys();
         addRole(form.value).then(response => {
-          proxy.$modal.msgSuccess("新增成功");
+          proxy.$modal.success("新增成功");
           open.value = false;
           getList();
         });
@@ -543,7 +543,7 @@ function submitDataScope() {
   if (form.value.roleId != undefined) {
     form.value.deptIds = getDeptAllCheckedKeys();
     dataScope(form.value).then(response => {
-      proxy.$modal.msgSuccess("修改成功");
+      proxy.$modal.success("修改成功");
       openDataScope.value = false;
       getList();
     });

@@ -44,7 +44,7 @@ function submit() {
   proxy.$refs.userRef.validate(valid => {
     if (valid) {
       updateUserProfile(props.user).then(response => {
-        proxy.$modal.msgSuccess("修改成功");
+        proxy.$modal.success("修改成功");
       });
     }
   });

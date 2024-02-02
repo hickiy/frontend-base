@@ -153,7 +153,7 @@ function cancelAuthUser(row) {
     return authUserCancel({ userId: row.userId, roleId: queryParams.roleId });
   }).then(() => {
     getList();
-    proxy.$modal.msgSuccess("取消授权成功");
+    proxy.$modal.success("取消授权成功");
   }).catch(() => {});
 }
 /** 批量取消授权按钮操作 */
@@ -164,7 +164,7 @@ function cancelAuthUserAll(row) {
     return authUserCancelAll({ roleId: roleId, userIds: uIds });
   }).then(() => {
     getList();
-    proxy.$modal.msgSuccess("取消授权成功");
+    proxy.$modal.success("取消授权成功");
   }).catch(() => {});
 }
 

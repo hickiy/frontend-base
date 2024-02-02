@@ -9,7 +9,7 @@
   </el-breadcrumb>
 </template>
 
-<script setup>
+<script setup name="Breadcrumb">
 import { onBeforeMount, onBeforeUnmount, onUnmounted } from 'vue';
 
 const route = useRoute();

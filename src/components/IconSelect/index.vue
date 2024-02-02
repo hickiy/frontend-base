@@ -38,7 +38,7 @@ function selectedIcon(name) {
 
 function reset() {
   iconName.value = ''
-  iconList.value = icons
+  iconList.value = ''
 }
 
 defineExpose({

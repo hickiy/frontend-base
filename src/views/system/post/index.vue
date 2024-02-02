@@ -242,13 +242,13 @@ function submitForm() {
     if (valid) {
       if (form.value.postId != undefined) {
         updatePost(form.value).then(response => {
-          proxy.$modal.msgSuccess("修改成功");
+          proxy.$modal.success("修改成功");
           open.value = false;
           getList();
         });
       } else {
         addPost(form.value).then(response => {
-          proxy.$modal.msgSuccess("新增成功");
+          proxy.$modal.success("新增成功");
           open.value = false;
           getList();
         });
@@ -263,7 +263,7 @@ function handleDelete(row) {
     return delPost(postIds);
   }).then(() => {
     getList();
-    proxy.$modal.msgSuccess("删除成功");
+    proxy.$modal.success("删除成功");
   }).catch(() => {});
 }
 /** 导出按钮操作 */

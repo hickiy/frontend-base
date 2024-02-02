@@ -355,7 +355,7 @@ function handleDelete(row) {
     })
     .then(() => {
       getList();
-      proxy.$modal.msgSuccess('删除成功');
+      proxy.$modal.success('删除成功');
     })
     .catch(() => { });
 }
@@ -378,7 +378,7 @@ function handleStatusChange(row) {
       return changeUserStatus(row.userId, row.status);
     })
     .then(() => {
-      proxy.$modal.msgSuccess(text + '成功');
+      proxy.$modal.success(text + '成功');
     })
     .catch(function () {
       row.status = row.status === '0' ? '1' : '0';
@@ -414,7 +414,7 @@ function handleResetPwd(row) {
     })
     .then(({ value }) => {
       resetUserPwd(row.userId, value).then((response) => {
-        proxy.$modal.msgSuccess('修改成功，新密码是：' + value);
+        proxy.$modal.success('修改成功，新密码是：' + value);
       });
     })
     .catch(() => { });
@@ -507,13 +507,13 @@ function submitForm() {
     if (valid) {
       if (form.value.userId != undefined) {
         updateUser(form.value).then((response) => {
-          proxy.$modal.msgSuccess('修改成功');
+          proxy.$modal.success('修改成功');
           open.value = false;
           getList();
         });
       } else {
         addUser(form.value).then((response) => {
-          proxy.$modal.msgSuccess('新增成功');
+          proxy.$modal.success('新增成功');
           open.value = false;
           getList();
         });

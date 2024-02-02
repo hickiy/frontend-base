@@ -219,7 +219,7 @@ function handleGenTable(row) {
   }
   if (row.genType === "1") {
     genCode(row.tableName).then(response => {
-      proxy.$modal.msgSuccess("成功生成到自定义路径：" + row.genPath);
+      proxy.$modal.success("成功生成到自定义路径：" + row.genPath);
     });
   } else {
     proxy.$download.zip("/tool/gen/batchGenCode?tables=" + tbNames, "ruoyi.zip");
@@ -231,7 +231,7 @@ function handleSynchDb(row) {
   proxy.$modal.confirm('确认要强制同步"' + tableName + '"表结构吗？').then(function () {
     return synchDb(tableName);
   }).then(() => {
-    proxy.$modal.msgSuccess("同步成功");
+    proxy.$modal.success("同步成功");
   }).catch(() => {});
 }
 /** 打开导入表弹窗 */
@@ -254,7 +254,7 @@ function handlePreview(row) {
 }
 /** 复制代码成功 */
 function copyTextSuccess() {
-  proxy.$modal.msgSuccess("复制成功");
+  proxy.$modal.success("复制成功");
 }
 // 多选框选中数据
 function handleSelectionChange(selection) {
@@ -275,7 +275,7 @@ function handleDelete(row) {
     return delTable(tableIds);
   }).then(() => {
     getList();
-    proxy.$modal.msgSuccess("删除成功");
+    proxy.$modal.success("删除成功");
   }).catch(() => {});
 }
 

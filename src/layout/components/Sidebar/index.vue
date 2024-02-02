@@ -30,7 +30,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup name="Sidebar">
 import SidebarItem from './SidebarItem';
 import variables from '@/assets/styles/variables.module.scss';
 import useAppStore from '@/store/modules/app';

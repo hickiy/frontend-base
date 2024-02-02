@@ -33,7 +33,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup name="Navbar">
 import { ElMessageBox } from 'element-plus';
 import Hamburger from '@/components/Hamburger';
 import useAppStore from '@/store/modules/app';
