@@ -1,9 +1,11 @@
-import { defineConfig, loadEnv } from 'vite';
 import path from 'path';
+import UnoCSS from 'unocss/vite';
 import createVitePlugins from './vite';
 import autoprefixer from 'autoprefixer';
-import UnoCSS from 'unocss/vite';
-import { presetIcons } from 'unocss';
+import px2rem from 'postcss-pxtorem';
+import { defineConfig, loadEnv } from 'vite';
+import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
+import { baseRemUnit } from './src/config.js'
 
 export default defineConfig(({ mode, command }) => {
   const env = loadEnv(mode, process.cwd());
@@ -14,9 +16,12 @@ export default defineConfig(({ mode, command }) => {
     base: VITE_APP_ENV === 'production' ? '/' : '/',
     plugins: [
       ...createVitePlugins(env, command === 'build'),
-      UnoCSS({
-        presets: [presetIcons()]
-      })
+      createSvgIconsPlugin({
+        iconDirs: [path.resolve(process.cwd(), 'src/assets/svg')],
+        symbolId: 'icon-[name]',
+        inject: 'body-first',
+      }),
+      UnoCSS(),
     ],
     resolve: {
       alias: {
@@ -44,6 +49,7 @@ export default defineConfig(({ mode, command }) => {
       postcss: {
         plugins: [
           autoprefixer({}),
+          px2rem({ rootValue: baseRemUnit, propList: ['*', '!min-*', '!--*'] }),
           {
             postcssPlugin: 'internal:charset-removal',
             AtRule: {

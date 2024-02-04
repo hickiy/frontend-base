@@ -3,11 +3,12 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "outDir": "",
+    "outDir": "dist", // Change the output directory to a different location
     "allowJs": true,
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "~/*": ["./*"]
     }
   },
-  "include": ["src/*", "src/**/*"]
+  "exclude": ["node_modules", "dist", "public", ".vscode"],
 }

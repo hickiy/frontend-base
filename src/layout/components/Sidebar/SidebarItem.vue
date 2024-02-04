@@ -1,9 +1,15 @@
 <template>
   <div v-if="!item.hidden">
-    <template v-if="hasOneShowingChild(item.children, item) && (!onlyOneChild.children || onlyOneChild.noShowingChildren) && !item.alwaysShow">
+    <template
+      v-if="
+        hasOneShowingChild(item.children, item) &&
+        (!onlyOneChild.children || onlyOneChild.noShowingChildren) &&
+        !item.alwaysShow
+      "
+    >
       <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path, onlyOneChild.query)">
         <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{ 'submenu-title-noDropdown': !isNest }">
-          <i :class="onlyOneChild.meta.icon || (item.meta && item.meta.icon)"></i>
+          <svg-icon class="mr-2" :icon-class="onlyOneChild.meta.icon || (item.meta && item.meta.icon)"></svg-icon>
           <template #title>
             <span class="menu-title" :title="hasTitle(onlyOneChild.meta.title)">{{ onlyOneChild.meta.title }}</span>
           </template>
@@ -12,7 +18,7 @@
     </template>
     <el-sub-menu v-else ref="subMenu" :index="resolvePath(item.path)" teleported>
       <template v-if="item.meta && isCollapse" #title>
-        <i :class="item.meta && item.meta.icon"></i>
+        <svg-icon class="mr-2" :icon-class="item.meta && item.meta.icon"></svg-icon>
         <span class="menu-title" :title="hasTitle(item.meta.title)">{{ item.meta.title }}</span>
       </template>
       <sidebar-item
