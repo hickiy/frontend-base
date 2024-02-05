@@ -7,7 +7,7 @@
         </keep-alive>
       </transition>
     </router-view>
-    <iframe-toggle />
+    <!-- <iframe-toggle /> -->
   </div>
 </template>
 
@@ -15,4 +15,5 @@
 import iframeToggle from './IframeToggle/index.vue';
 import useTagsViewStore from '@/store/modules/tagsView';
 const tagsViewStore = useTagsViewStore();
+
 </script>

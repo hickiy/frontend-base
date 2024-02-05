@@ -18,5 +18,5 @@ import { AppMain, Navbar } from './components';
 import useSettingsStore from '@/store/modules/app';
 
 const settingsStore = useSettingsStore();
-const theme = computed(() => settingsStore.theme);
+const theme = computed(() => settingsStore.theme); 
 </script>

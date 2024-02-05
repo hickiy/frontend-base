@@ -10,7 +10,7 @@ import router from './router'; // router
 import component from './components'; // global component
 import directive from './directive'; // directive
 import utils from './utils'; // utils
-import './effect/index'; // effect
+import './plugin/index'; // effect
 
 // 创建应用
 const app = createApp(App);
