@@ -12,11 +12,12 @@
 </template>
 
 <script setup name="Layout">
-import Sidebar from './components/Sidebar/index.vue';
-import Breadcrumb from '@/components/Breadcrumb/index.vue';
-import { AppMain, Navbar } from './components';
+import Sidebar from './Sidebar/index.vue';
+import Breadcrumb from './Breadcrumb/index.vue';
+import AppMain from './AppMain/index.vue';
+import Navbar from './Navbar/index.vue';
 import useSettingsStore from '@/store/modules/app';
 
 const settingsStore = useSettingsStore();
-const theme = computed(() => settingsStore.theme); 
+const theme = computed(() => settingsStore.theme);
 </script>

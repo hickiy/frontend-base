@@ -1,6 +1,7 @@
 import { createWebHistory, createRouter } from 'vue-router';
+import { beforeEach, afterEach } from './permission';
 /* Layout */
-import Layout from '@/layout';
+import Layout from '@/layout/index.vue';
 
 /**
  * Note: 路由配置项
@@ -45,27 +46,6 @@ export const constantRoutes = [
     path: '/401',
     component: () => import('@/views/error/401'),
     hidden: true
-  },
-  {
-    path: '',
-    redirect: '/index',
-    component: Layout,
-    children: [
-      {
-        path: '/test/subpage1',
-        props: (route) => route.query,
-        component: () => import('@/views/test/subpage1.vue'),
-        meta: { title: '测试子页面1', activeMenu: '/index' },
-        hidden: true
-      },
-      {
-        path: '/test/subpage2',
-        props: (route) => route.query,
-        component: () => import('@/views/test/subpage2.vue'),
-        meta: { title: '测试子页面2', activeMenu: '/index' },
-        hidden: true
-      }
-    ]
   },
   {
     path: '/index',
@@ -180,5 +160,8 @@ const router = createRouter({
     }
   }
 });
+
+router.beforeEach(beforeEach);
+router.afterEach(afterEach);
 
 export default router;

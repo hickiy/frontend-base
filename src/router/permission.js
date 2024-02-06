@@ -1,8 +1,6 @@
-import router from '../router/index';
 import { ElMessage } from 'element-plus';
 import NProgress from 'nprogress';
 import { getToken } from '@/utils/auth';
-import { isHttp } from '@/utils/validate';
 import { isRelogin } from '@/utils/request';
 import useUserStore from '@/store/modules/user';
 import useSettingsStore from '@/store/modules/app';
@@ -12,7 +10,7 @@ NProgress.configure({ showSpinner: false });
 
 const whiteList = ['/login', '/register'];
 
-router.beforeEach((to, from, next) => {
+export function beforeEach(to, from, next) {
   NProgress.start();
   if (getToken()) {
     to.meta.title && useSettingsStore().setTitle(to.meta.title);
@@ -30,13 +28,7 @@ router.beforeEach((to, from, next) => {
             isRelogin.show = false;
             usePermissionStore()
               .generateRoutes()
-              .then((accessRoutes) => {
-                // 根据roles权限生成可访问的路由表
-                accessRoutes.forEach((route) => {
-                  if (!isHttp(route.path)) {
-                    router.addRoute(route); // 动态添加可访问路由表
-                  }
-                });
+              .then(() => {
                 next({ ...to, replace: true }); // hack方法 确保addRoutes已完成
               });
           })
@@ -62,8 +54,8 @@ router.beforeEach((to, from, next) => {
       NProgress.done();
     }
   }
-});
+};
 
-router.afterEach(() => {
+export function afterEach() {
   NProgress.done();
-});
+};

@@ -2,8 +2,10 @@ import auth from '@/utils/auth';
 import router, { constantRoutes, dynamicRoutes } from '@/router';
 import { getRouters } from '@/api/menu';
 import Layout from '@/layout/index';
-import ParentView from '@/components/ParentView';
-import InnerLink from '@/layout/components/InnerLink';
+import ParentView from '@/layout/ParentView/index.vue';
+import InnerLink from '@/layout/InnerLink/index.vue';
+import { isHttp } from '@/utils/validate';
+
 
 // 匹配views里面所有的.vue文件
 const modules = import.meta.glob('./../../views/**/*.vue');
@@ -51,7 +53,13 @@ const usePermissionStore = defineStore('permission', {
           this.setSidebarRouters(constantRoutes.concat(sidebarRoutes));
           this.setDefaultRoutes(sidebarRoutes);
           this.setTopbarRoutes(defaultRoutes);
-          resolve(rewriteRoutes);
+          // 根据roles权限生成可访问的路由表
+          rewriteRoutes.forEach((route) => {
+            if (!isHttp(route.path)) {
+              router.addRoute(route); // 动态添加可访问路由表
+            }
+          });
+          resolve();
         });
       });
     }
