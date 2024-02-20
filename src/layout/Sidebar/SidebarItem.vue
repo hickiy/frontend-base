@@ -16,10 +16,18 @@
         </el-menu-item>
       </app-link>
     </template>
-    <el-sub-menu v-else ref="subMenu" :index="resolvePath(item.path)" teleported>
-      <template v-if="item.meta && isCollapse" #title>
+    <el-sub-menu
+      :class="{ 'is-collapse': !isCollapse }"
+      v-else
+      ref="subMenu"
+      :index="resolvePath(item.path)"
+      teleported
+    >
+      <template #title>
         <svg-icon class="mr-2" :icon-class="item.meta && item.meta.icon"></svg-icon>
-        <span class="menu-title" :title="hasTitle(item.meta.title)">{{ item.meta.title }}</span>
+        <span v-if="item.meta && isCollapse" class="menu-title" :title="hasTitle(item.meta.title)">{{
+          item.meta.title
+        }}</span>
       </template>
       <sidebar-item
         v-for="child in item.children"
@@ -121,3 +129,13 @@ function hasTitle(title) {
   }
 }
 </script>
+<style scoped lang="scss">
+.is-collapse:deep() {
+  .el-sub-menu__title {
+    padding-right: 0 !important;
+  }
+  .el-sub-menu__icon-arrow{
+    right: 12px;
+  }
+}
+</style>

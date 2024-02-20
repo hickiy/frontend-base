@@ -57,64 +57,19 @@ const activeMenu = computed(() => {
 });
 </script>
 <style scoped lang="scss">
+.sidebar-wrap:deep() {
+  .el-menu-item {
+    &.is-active {
+      color: #fff;
+      background-color: #0e36ac;
+      &:hover{
+        background-color: #282e3c !important;
+      }
+    }
+  }
+}
 .sidebar-wrap {
   transition: width 0.28s;
   box-shadow: 2px 0 6px rgba(0, 21, 41, 0.35);
-
-  // reset element-ui css
-  .horizontal-collapse-transition {
-    transition: 0s width ease-in-out, 0s padding-left ease-in-out, 0s padding-right ease-in-out;
-  }
-
-  .scrollbar-wrapper {
-    overflow-x: hidden !important;
-  }
-
-  .el-scrollbar__bar.is-vertical {
-    right: 0px;
-  }
-
-  .el-scrollbar {
-    height: 100%;
-  }
-
-  &.has-logo {
-    .el-scrollbar {
-      height: calc(100% - 50px);
-    }
-  }
-
-  .is-horizontal {
-    display: none;
-  }
-
-  .svg-icon {
-    margin-right: 16px;
-  }
-
-  .el-menu {
-    border: none;
-    height: 100%;
-    width: 100% !important;
-  }
-
-  .el-menu-item,
-  .menu-title {
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    white-space: nowrap !important;
-  }
-
-  .el-menu-item .el-menu-tooltip__trigger {
-    display: inline-block !important;
-  }
-
-  // menu hover
-  .sub-menu-title-noDropdown,
-  .el-sub-menu__title {
-    &:hover {
-      background-color: rgba(0, 0, 0, 0.06) !important;
-    }
-  }
 }
 </style>
