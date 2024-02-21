@@ -32,7 +32,7 @@
 
 <script setup name="Sidebar">
 import SidebarItem from './SidebarItem';
-import variables from '@/assets/styles/variables.module.scss';
+import variables from '/E:/learn/frontend-base/src/assets/styles/variables.module.scss';
 import useAppStore from '@/store/modules/app';
 import useSettingsStore from '@/store/modules/app';
 import usePermissionStore from '@/store/modules/permission';

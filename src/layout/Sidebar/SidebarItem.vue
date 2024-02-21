@@ -9,7 +9,7 @@
     >
       <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path, onlyOneChild.query)">
         <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{ 'submenu-title-noDropdown': !isNest }">
-          <svg-icon class="mr-2" :icon-class="onlyOneChild.meta.icon || (item.meta && item.meta.icon)"></svg-icon>
+          <svg-icon class="mr-2 text-base" :icon-class="onlyOneChild.meta.icon || (item.meta && item.meta.icon)"></svg-icon>
           <template #title>
             <span class="menu-title" :title="hasTitle(onlyOneChild.meta.title)">{{ onlyOneChild.meta.title }}</span>
           </template>
@@ -24,7 +24,7 @@
       teleported
     >
       <template #title>
-        <svg-icon class="mr-2" :icon-class="item.meta && item.meta.icon"></svg-icon>
+        <svg-icon class="mr-2 text-base" :icon-class="item.meta && item.meta.icon"></svg-icon>
         <span v-if="item.meta && isCollapse" class="menu-title" :title="hasTitle(item.meta.title)">{{
           item.meta.title
         }}</span>
