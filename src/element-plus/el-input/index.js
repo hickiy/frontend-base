@@ -1,9 +1,8 @@
 /*  hickey 2023/11/7 */
 import { ElInput } from 'element-plus';
 export default {
-  ...ElInput,
+  extends: ElInput,
   props: {
-    ...ElInput.props,
     decimal: Number
   },
   setup(props, ctx) {

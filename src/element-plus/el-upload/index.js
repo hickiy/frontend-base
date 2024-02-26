@@ -4,12 +4,15 @@ import request from '@/utils/request';
 import { getCurrentInstance } from 'vue';
 
 export default {
-  ...ElUpload,
+  extends: ElUpload,
   props: {
-    ...ElUpload.props,
     action: {
       type: String,
       default: '/file/upload'
+    },
+    listType: {
+      type: String,
+      default: 'picture-card'
     },
     beforeUpload: {
       default(props) {

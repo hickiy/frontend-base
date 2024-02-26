@@ -1,9 +1,8 @@
-import { ElTable as Table, ElTooltip as Tooltip, ElButton as Button } from 'element-plus';
+import { ElTable } from 'element-plus';
 import Prepend from './prepend.vue';
 import { h } from 'vue';
 export default {
-  name: Table.name,
-  inheritAttrs: false,
+  extends: ElTable,
   props: {
     setTable: {
       type: [Boolean, Array],
@@ -14,49 +13,11 @@ export default {
       default: ''
     }
   },
-  data() {
-    return {
-      tooltipContent: ''
-    };
+  setup(props, ctx) {
+    return ElTable.setup(props, ctx);
   },
-  activated() {
-    this.originTable.doLayout();
-  },
-  computed: {
-    originTable() {
-      return this.$refs['origin-table'];
-    }
-  },
-  methods: {
-    clearSelection(...arg) {
-      this.originTable.clearSelection(...arg);
-    },
-    toggleRowSelection(...arg) {
-      this.originTable.toggleRowSelection(...arg);
-    },
-    toggleAllSelection(...arg) {
-      this.originTable.toggleAllSelection(...arg);
-    },
-    toggleRowExpansion(...arg) {
-      this.originTable.toggleRowExpansion(...arg);
-    },
-    setCurrentRow(...arg) {
-      this.originTable.setCurrentRow(...arg);
-    },
-    clearSort(...arg) {
-      this.originTable.clearSort(...arg);
-    },
-    clearFilter(...arg) {
-      this.originTable.clearFilter(...arg);
-    },
-    doLayout() {
-      this.originTable.doLayout();
-    },
-    sort(...arg) {
-      this.originTable.sort(...arg);
-    }
-  },
-  render() {
+  render(...args) {
+    const children = [ElTable.render.apply(this, args)];
     // table设置面板
     const setting = h(
       Prepend,
@@ -69,20 +30,6 @@ export default {
         default: this.$slots.prepend
       }
     );
-
-    // el-table组件
-    const table = h(
-      Table,
-      {
-        ...this.$attrs,
-        ref: 'origin-table'
-      },
-      {
-        default: this.$slots.default
-      }
-    );
-
-    const children = [table];
     if (this.setTable) {
       children.unshift(setting);
     }
@@ -101,5 +48,5 @@ export default {
       style.flexFlow = 'column ';
     }
     return h('div', { style }, children);
-  }
+  },
 };

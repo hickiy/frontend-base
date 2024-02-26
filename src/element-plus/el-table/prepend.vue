@@ -41,12 +41,12 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      this.columns = [...this.$parent.$refs['origin-table']?.store?.states?._columns.value];
+      this.columns = [...this.$parent.store?.states?._columns.value];
     });
   },
   methods: {
     columnChange(val, col) {
-      const store = this.$parent.$refs['origin-table'].store;
+      const store = this.$parent.store;
       if (val) {
         store.commit('insertColumn', col, null);
       } else {
