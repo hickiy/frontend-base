@@ -56,6 +56,10 @@ export function beforeEach(to, from, next) {
   }
 };
 
+export function beforeResolve(to, from, next) {
+  next();
+}
+
 export function afterEach() {
   NProgress.done();
 };

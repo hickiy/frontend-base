@@ -1,5 +1,5 @@
 import { createWebHistory, createRouter } from 'vue-router';
-import { beforeEach, afterEach } from './permission';
+import { beforeEach, afterEach, beforeResolve } from './permission';
 /* Layout */
 import Layout from '@/layout/index.vue';
 
@@ -162,6 +162,7 @@ const router = createRouter({
 });
 
 router.beforeEach(beforeEach);
+router.beforeResolve(beforeResolve);
 router.afterEach(afterEach);
 
 export default router;
