@@ -69,6 +69,16 @@ const usePermissionStore = defineStore('permission', {
 // 遍历后台传来的路由字符串，转换为组件对象
 function filterAsyncRouter(asyncRouterMap, lastRouter = false, type = false) {
   return asyncRouterMap.filter((route) => {
+    // 标识路由是否是目录
+    if (Array.isArray(route.children) && route.children.length) {
+      route.meta.routeType = 'folder';
+    } else {
+      route.meta.routeType = 'menu';
+    }
+    // 在meta中记录父级路由
+    if (lastRouter) {
+      route.meta.parent = JSON.parse(JSON.stringify(lastRouter));
+    }
     if (type && route.children) {
       route.children = filterChildren(route.children);
     }

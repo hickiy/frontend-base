@@ -5,10 +5,14 @@ import { isRelogin } from '@/utils/request';
 import useUserStore from '@/store/modules/user';
 import useSettingsStore from '@/store/modules/app';
 import usePermissionStore from '@/store/modules/permission';
+import useViewsStore from '@/store/modules/views';
+import { set } from '@vueuse/core';
 
 NProgress.configure({ showSpinner: false });
 
 const whiteList = ['/login', '/register'];
+let breadItemId = 0;
+let componentId = 0;
 
 export function beforeEach(to, from, next) {
   NProgress.start();
@@ -57,7 +61,90 @@ export function beforeEach(to, from, next) {
 };
 
 export function beforeResolve(to, from, next) {
-  next();
+  const { breadcrumbs, cachedViews } = useViewsStore();
+  const toComponent = to.matched[to.matched.length - 1]?.components;
+  const fromComponent = from.matched[from.matched.length - 1]?.components;
+  const breadItemIndex = breadcrumbs.findLastIndex((crumb) => crumb.fullPath == to.fullPath);
+  if (breadItemIndex > -1) {
+    // 如果面包屑中已经存在，则视为回退，删除面包屑并删除缓存
+    breadcrumbs.splice(breadItemIndex + 1, breadcrumbs.length - breadItemIndex);
+    /**
+     * 对于匹配到的组件，从breadcrumb中获得缓存时使用的componentName, 并写入到匹配到的组件中
+     * 使用componentName检查是否被缓存，如果被缓存则删除缓存
+     */
+    const name = breadcrumbs[breadItemIndex].componentName ?? toComponent?.default.name;
+    if (name) {
+      toComponent.default.name = name;
+    }
+    const cachedViewIndex = cachedViews.findIndex((view) => view == name);
+    if (cachedViewIndex > -1) {
+      cachedViews.splice(cachedViewIndex + 1, cachedViews.length - cachedViewIndex);
+    }
+  } else {
+    // 如果面包屑中不存, 则根据路由类型确定是重置还是前进  
+    if (to.meta.routeType) {
+      // 如果是菜单或者目录，则视为重置，删除所有面包屑, 删除所有缓存的视图
+      const levelList = [];
+      let meta = to.meta;
+      while (meta) {
+        levelList.unshift({ ...meta, fullPath: to.fullPath, path: to.path, id: breadItemId++ });
+        meta = meta.parent && meta.parent.meta;
+      }
+      breadcrumbs.splice(0, breadcrumbs.length, ...levelList);
+      cachedViews.splice(0, cachedViews.length);
+    } else {
+      // 否则视为前进
+      /**
+       * 对离开的路径进行处理
+       * 首先检查fromComponent是否具有一个名称
+       * 其次检查to.query查询参数是否具有needCache标记，如果不存在则默认缓存，
+       * 如果needCache为false，则不缓存
+       */
+      const fromName = fromComponent?.default.name;
+      const needCache = to.query.needCache ?? true;
+      if (fromName && needCache) {
+        cachedViews.push(fromName);
+      }
+      /**
+       * 这里由于相同的路由可能不同的参数，相当于相同组件的不同实例
+       * 不同路由也有可能复用相同的组件，相当于相同组件的不同实例
+       * 因此需要对组件名称进行处理
+       * 
+       * 首先检查toComponent是否具有一个名称
+       * 其次检查toComponent是否已存在一被缓存的实例，如果不存在直接将名称写入到breadcrumb中
+       * 如果存在则将组件进行一层浅拷贝，浅拷贝是为了防止修改组件名称影响到缓存的组件实例
+       * 浅拷贝后将组件后加上一个唯一的id，最后将组件名称写入到meta中
+       * meta中存储的名称，在回退复用缓存时用于恢复到之前的名称
+       */
+      const toName = toComponent?.default.name;
+      if (toName) {
+        const cachedViewIndex = cachedViews.findIndex((view) => view == toName);
+        if (cachedViewIndex > -1) {
+          toComponent.default = {
+            ...toComponent.default,
+            name: `${toName}-${componentId++}`
+          };
+        }
+        to.meta.componentName = toComponent?.default.name ?? toName;
+      }
+      /**
+       * 对面包屑进行处理
+       * 可以通过query参数设置面包屑标题
+       * 如果存在crumbTitle则设置面包屑标题，并删除crumbTitle
+       * 最后生成新的面包屑并写入到breadcrumbs中
+       */
+      if (to?.query.crumbTitle) {
+        to.meta.title = to.query.crumbTitle;
+        Reflect.deleteProperty(to.query, 'crumbTitle');
+      }
+      const searchParams = new URLSearchParams(to.query).toString();
+      const queryStr = searchParams.zise ? `?${searchParams.toString()}` : '';
+      breadcrumbs.push({ ...to.meta, fullPath: `${to.path}${queryStr}`, path: to.path, id: breadItemId++ });
+    }
+  }
+  setTimeout(() => {
+    next();
+  }, 0);
 }
 
 export function afterEach() {
