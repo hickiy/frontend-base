@@ -6,7 +6,6 @@ import useUserStore from '@/store/modules/user';
 import useSettingsStore from '@/store/modules/app';
 import usePermissionStore from '@/store/modules/permission';
 import useViewsStore from '@/store/modules/views';
-import { set } from '@vueuse/core';
 
 NProgress.configure({ showSpinner: false });
 
@@ -71,6 +70,8 @@ export function beforeResolve(to, from, next) {
     /**
      * 对于匹配到的组件，从breadcrumb中获得缓存时使用的componentName, 并写入到匹配到的组件中
      * 使用componentName检查是否被缓存，如果被缓存则删除缓存
+     * 对于缓存的页面，检查是否存在activated方法，如果存在则调用activated方法
+     * 用于处理一些回退后需要重新执行的操作
      */
     const name = breadcrumbs[breadItemIndex].componentName ?? toComponent?.default.name;
     if (name) {
@@ -79,6 +80,9 @@ export function beforeResolve(to, from, next) {
     const cachedViewIndex = cachedViews.findIndex((view) => view == name);
     if (cachedViewIndex > -1) {
       cachedViews.splice(cachedViewIndex + 1, cachedViews.length - cachedViewIndex);
+      if (breadcrumbs[breadItemIndex]?.activated) {
+        breadcrumbs[breadItemIndex].activated();
+      }
     }
   } else {
     // 如果面包屑中不存, 则根据路由类型确定是重置还是前进  
@@ -99,10 +103,17 @@ export function beforeResolve(to, from, next) {
        * 首先检查fromComponent是否具有一个名称
        * 其次检查to.query查询参数是否具有needCache标记，如果不存在则默认缓存，
        * 如果needCache为false，则不缓存
+       * 如果需要缓存，则可以通过query参数设置设置一个activated方法，用于处理一些回退后需要重新执行的操作
+       * 如果存在activated则将activated写入到对应的breadcrumb中
+       * 从to.query中删除activated，避免在在url中显示
        */
       const fromName = fromComponent?.default.name;
       const needCache = to.query.needCache ?? true;
       if (fromName && needCache) {
+        if (breadcrumbs.length > 0 && to.query?.activated && typeof to.query.activated == 'function') {
+          breadcrumbs[breadcrumbs.length - 1].activated = to.query.activated;
+          Reflect.deleteProperty(to.query, 'activated');
+        }
         cachedViews.push(fromName);
       }
       /**
@@ -130,7 +141,8 @@ export function beforeResolve(to, from, next) {
       /**
        * 对面包屑进行处理
        * 可以通过query参数设置面包屑标题
-       * 如果存在crumbTitle则设置面包屑标题，并删除crumbTitle
+       * 如果存在crumbTitle则设置面包屑标题，
+       * 删除to.query中的crumbTitle，避免在url中显示
        * 最后生成新的面包屑并写入到breadcrumbs中
        */
       if (to?.query.crumbTitle) {
