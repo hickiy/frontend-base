@@ -2,6 +2,7 @@ import axios from 'axios';
 import { saveAs } from 'file-saver';
 import { ElNotification, ElMessageBox, ElMessage, ElLoading } from 'element-plus';
 import { getToken } from '@/utils/cookies';
+import { jsonDeep } from '@/utils/json';
 import errorCode from '@/utils/errorCode';
 import useUserStore from '@/store/modules/user';
 
@@ -24,13 +25,34 @@ const service = axios.create({
 // request拦截器
 service.interceptors.request.use(
   (config) => {
-    // TODO 是否需要防止数据重复提交
-    // const isRepeatSubmit = (config.headers || {}).repeatSubmit === false;
-
-    // 是否需要设置 token
-    const isToken = (config.headers || {}).isToken === false;
+    const headers = config.headers ?? {};
+    // 是否需要防止数据重复提交，默认为true, 可以在请求中设置isCheckRepeat: false来取消
+    const isCheckRepeat = headers.isCheckRepeat ?? true;
+    // 参数序列化深度
+    const deep = headers.deep ?? 1;
+    // 只对post, put, delete请求进行防重复提交处理
+    const defaultMethodReg = /^(post|put|delete)$/i;
+    if (isCheckRepeat && defaultMethodReg.test(config.method)) {
+      // 生成请求唯一标识, 用于在响应拦截器中删除pendedRes中的请求记录
+      let key = config.url;
+      if (config.params) {
+        key += `-${JSON.stringify(config.params, jsonDeep(deep))}`;
+      }
+      if (config.data) {
+        key += `-${JSON.stringify(config.data, jsonDeep(deep))}`;
+      }
+      if (pendedRes[key]) {
+        ElMessage({ message: '请勿重复提交', type: 'warning' });
+        return Promise.reject('请勿重复提交');
+      } else {
+        config.requestKey = key;
+        pendedRes[key] = true;
+      }
+    }
+    // 是否需要设置 token, 默认为true, 可以在请求中设置isNeedToken: false来取消
+    const isNeedToken = headers.isNeedToken ?? true;
     const token = getToken();
-    if (token && !isToken) {
+    if (isNeedToken && token) {
       config.headers['Authorization'] = `Bearer ${token}`; // 让每个请求携带自定义token 请根据实际情况自行修改
     }
     return config;
@@ -43,6 +65,10 @@ service.interceptors.request.use(
 // 响应拦截器
 service.interceptors.response.use(
   (res) => {
+    // 删除pendedRes中的请求记录
+    if (res.config.requestKey) {
+      Reflect.deleteProperty(pendedRes, res.config.requestKey);
+    }
     // 未设置状态码则默认成功状态
     const code = res.data.code || 200;
     // 获取错误信息
