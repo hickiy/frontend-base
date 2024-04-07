@@ -5,7 +5,13 @@
       <div class="form-sub-title">欢迎您进入运营管理中心！</div>
       <el-form class="login-form" ref="loginRef" :model="loginForm" :rules="loginRules" hide-required-asterisk>
         <el-form-item prop="username" label="账号">
-          <el-input v-model="loginForm.username" prefix-icon="icon-user" type="text" auto-complete="user" placeholder="请输入账号或手机号">
+          <el-input
+            v-model="loginForm.username"
+            prefix-icon="icon-user"
+            type="text"
+            auto-complete="user"
+            placeholder="请输入账号或手机号"
+          >
           </el-input>
         </el-form-item>
         <el-form-item prop="password" label="密码">
@@ -36,7 +42,6 @@
 
 <script setup>
 import Cookies from 'js-cookie';
-import { encrypt, decrypt } from '@/utils/jsencrypt';
 import useUserStore from '@/store/modules/user';
 
 const userStore = useUserStore();
@@ -46,8 +51,7 @@ const { proxy } = getCurrentInstance();
 
 const loginForm = ref({
   username: '',
-  password: '',
-  rememberMe: false
+  password: ''
 });
 
 const loginRules = {
@@ -71,17 +75,6 @@ function handleLogin() {
   proxy.$refs.loginRef.validate((valid) => {
     if (valid) {
       loading.value = true;
-      // 勾选了需要记住密码设置在 cookie 中设置记住用户名和密码
-      if (loginForm.value.rememberMe) {
-        Cookies.set('username', loginForm.value.username, { expires: 30 });
-        Cookies.set('password', encrypt(loginForm.value.password), { expires: 30 });
-        Cookies.set('rememberMe', loginForm.value.rememberMe, { expires: 30 });
-      } else {
-        // 否则移除
-        Cookies.remove('username');
-        Cookies.remove('password');
-        Cookies.remove('rememberMe');
-      }
       // 调用action的登录方法
       userStore
         .login(loginForm.value)
@@ -104,12 +97,8 @@ function handleLogin() {
 
 function getCookie() {
   const username = Cookies.get('username');
-  const password = Cookies.get('password');
-  const rememberMe = Cookies.get('rememberMe');
   loginForm.value = {
-    username: username === undefined ? loginForm.value.username : username,
-    password: password === undefined ? loginForm.value.password : decrypt(password),
-    rememberMe: rememberMe === undefined ? false : Boolean(rememberMe)
+    username: username === undefined ? loginForm.value.username : username
   };
 }
 getCookie();
@@ -121,7 +110,8 @@ getCookie();
   height: 100%;
   min-height: 768px;
   background: url('@/assets/login/login_logo_white@2x.png') 140px 60px / 140px auto no-repeat,
-    url('@/assets/login/login_title_2@2x.png') center 80px / 507px auto no-repeat, url('@/assets/login/login_bg@2x.png') 0 0 / 100% no-repeat, #f7f8fa;
+    url('@/assets/login/login_title_2@2x.png') center 80px / 507px auto no-repeat,
+    url('@/assets/login/login_bg@2x.png') 0 0 / 100% no-repeat, #f7f8fa;
   display: grid;
   grid-template-rows: auto 38px;
   grid-template-columns: 100%;
