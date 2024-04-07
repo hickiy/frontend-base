@@ -1,14 +1,17 @@
 import axios from 'axios';
-import { ElNotification, ElMessageBox, ElMessage, ElLoading } from 'element-plus';
-import { getToken } from '@/utils/auth';
-import errorCode from '@/utils/errorCode';
 import { saveAs } from 'file-saver';
+import { ElNotification, ElMessageBox, ElMessage, ElLoading } from 'element-plus';
+import { getToken } from '@/utils/cookies';
+import errorCode from '@/utils/errorCode';
 import useUserStore from '@/store/modules/user';
 
-let downloadLoadingInstance;
+// loading实例
+let loadingInstance;
 // 是否显示重新登录
-export let isRelogin = { show: false };
-
+let isRelogin = { show: false };
+// 已发出的请求列表，防止重复提交
+let pendedRes = {};
+// 默认的content-type
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8';
 // 创建axios实例
 const service = axios.create({
@@ -21,12 +24,14 @@ const service = axios.create({
 // request拦截器
 service.interceptors.request.use(
   (config) => {
+    // TODO 是否需要防止数据重复提交
+    // const isRepeatSubmit = (config.headers || {}).repeatSubmit === false;
+
     // 是否需要设置 token
     const isToken = (config.headers || {}).isToken === false;
-    // 是否需要防止数据重复提交
-    const isRepeatSubmit = (config.headers || {}).repeatSubmit === false;
-    if (getToken() && !isToken) {
-      config.headers['Authorization'] = 'Bearer ' + getToken(); // 让每个请求携带自定义token 请根据实际情况自行修改
+    const token = getToken();
+    if (token && !isToken) {
+      config.headers['Authorization'] = `Bearer ${token}`; // 让每个请求携带自定义token 请根据实际情况自行修改
     }
     return config;
   },
@@ -81,7 +86,7 @@ service.interceptors.response.use(
     }
   },
   (error) => {
-    console.log('err' + error);
+    console.log('err: ' + error);
     let { message } = error;
     if (message == 'Network Error') {
       message = '后端接口连接异常';
@@ -96,36 +101,43 @@ service.interceptors.response.use(
 );
 
 // 通用下载方法
-export function download(url, params, filename, config) {
-  downloadLoadingInstance = ElLoading.service({ text: '正在下载数据，请稍候', background: 'rgba(0, 0, 0, 0.7)' });
-  return service
-    .post(url, params, {
-      transformRequest: [
-        (params) => {
-          return tansParams(params);
-        }
-      ],
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      responseType: 'blob',
-      ...config
+function download(url, opt) {
+  loadingInstance = ElLoading.service({
+    customClass: 'download-file-loading',
+    text: '正在下载数据，请稍候',
+    spinner: 'el-icon-loading',
+    background: 'rgba(0, 0, 0, 0.7)'
+  });
+  const config = {
+    url,
+    method: opt.method || 'get',
+    headers: opt.headers,
+    data: opt.data,
+    params: opt.params,
+    responseType: opt.responseType || 'blob'
+  };
+  // 主要用于直接从文件服务器下载文件，不需要通过后台接口
+  if (opt.baseURL != undefined) {
+    config.baseURL = opt.baseURL;
+  }
+  return service(config)
+    .then((res) => {
+      Message.success(`下载成功: ${opt.fileName}`);
+      saveAs(res, opt.fileName);
     })
-    .then(async (data) => {
-      if (data instanceof Blob) {
-        const blob = new Blob([data]);
-        saveAs(blob, filename);
-      } else {
-        const resText = await data.text();
-        const rspObj = JSON.parse(resText);
-        const errMsg = errorCode[rspObj.code] || rspObj.msg || errorCode['default'];
-        ElMessage.error(errMsg);
-      }
-      downloadLoadingInstance.close();
+    .catch((e) => {
+      console.error(e);
+      Message.error('下载文件出现错误，请稍后重试');
     })
-    .catch((r) => {
-      console.error(r);
-      ElMessage.error('下载文件出现错误，请联系管理员！');
-      downloadLoadingInstance.close();
+    .finally(() => {
+      loadingInstance.close();
     });
 }
 
+export {
+  loadingInstance, // loading实例
+  isRelogin, // 是否显示重新登录
+  pendedRes, // 已发出的请求列表，防止重复提交
+  download // 通用下载方法
+}
 export default service;

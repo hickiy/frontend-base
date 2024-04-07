@@ -229,7 +229,7 @@
 </template>
 
 <script setup name="User">
-import { getToken } from '@/utils/auth';
+import { getToken } from '@/utils/cookies';
 import { changeUserStatus, listUser, resetUserPwd, delUser, getUser, updateUser, addUser, deptTreeSelect } from '@/api/system/user';
 
 const router = useRouter();

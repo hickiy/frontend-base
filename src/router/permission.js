@@ -1,6 +1,6 @@
 import { ElMessage } from 'element-plus';
 import NProgress from 'nprogress';
-import { getToken } from '@/utils/auth';
+import { getToken } from '@/utils/cookies';
 import { isRelogin } from '@/utils/request';
 import useUserStore from '@/store/modules/user';
 import useSettingsStore from '@/store/modules/app';

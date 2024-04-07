@@ -29,7 +29,7 @@
 <script setup>
 import { QuillEditor } from "@vueup/vue-quill";
 import "@vueup/vue-quill/dist/vue-quill.snow.css";
-import { getToken } from "@/utils/auth";
+import { getToken } from "@/utils/cookies";
 
 const { proxy } = getCurrentInstance();
 

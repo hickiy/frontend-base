@@ -17,6 +17,7 @@
 }
 
 /**
+ * 判断用户名是否合法
  * @param {string} str
  * @returns {Boolean}
  */
@@ -26,6 +27,7 @@ export function validUsername(str) {
 }
 
 /**
+ * 判断是否为合法的url
  * @param {string} url
  * @returns {Boolean}
  */
@@ -35,6 +37,7 @@ export function validURL(url) {
 }
 
 /**
+ * 判断是否为小写字母
  * @param {string} str
  * @returns {Boolean}
  */
@@ -44,6 +47,7 @@ export function validLowerCase(str) {
 }
 
 /**
+ * 判断是否为大写字母
  * @param {string} str
  * @returns {Boolean}
  */
@@ -53,6 +57,7 @@ export function validUpperCase(str) {
 }
 
 /**
+ * 判断是否为大小写字母
  * @param {string} str
  * @returns {Boolean}
  */
@@ -62,6 +67,7 @@ export function validAlphabets(str) {
 }
 
 /**
+ * 判断是否为邮箱
  * @param {string} email
  * @returns {Boolean}
  */
@@ -70,24 +76,4 @@ export function validEmail(email) {
   return reg.test(email)
 }
 
-/**
- * @param {string} str
- * @returns {Boolean}
- */
-export function isString(str) {
-  if (typeof str === 'string' || str instanceof String) {
-    return true
-  }
-  return false
-}
 
-/**
- * @param {Array} arg
- * @returns {Boolean}
- */
-export function isArray(arg) {
-  if (typeof Array.isArray === 'undefined') {
-    return Object.prototype.toString.call(arg) === '[object Array]'
-  }
-  return Array.isArray(arg)
-}

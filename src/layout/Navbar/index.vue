@@ -1,11 +1,9 @@
 <template>
   <div class="navbar">
-    <hamburger
-      id="hamburger-container"
-      class="hamburger-container cursor-pointer"
-      :is-active="appStore.sidebar.opened"
-      @toggleClick="toggleSideBar"
-    />
+    <div @click="toggleSideBar">
+      <el-icon :size="20" v-if="appStore.sidebar.opened"><Fold /></el-icon>
+      <el-icon :size="20" v-else><Expand /></el-icon>
+    </div>
     <a href="/">
       <img class="right-logo" style="width: 140px" src="@/assets/images/home_logo@2x.png" />
     </a>
@@ -40,7 +38,6 @@
 
 <script setup name="Navbar">
 import { ElIcon, ElMessageBox } from 'element-plus';
-import Hamburger from '@/components/Hamburger';
 import useAppStore from '@/store/modules/app';
 import useUserStore from '@/store/modules/user';
 
