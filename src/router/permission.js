@@ -154,9 +154,7 @@ export function beforeResolve(to, from, next) {
       breadcrumbs.push({ ...to.meta, fullPath: `${to.path}${queryStr}`, path: to.path, id: breadItemId++ });
     }
   }
-  setTimeout(() => {
-    next();
-  }, 0);
+  next();
 }
 
 export function afterEach() {
