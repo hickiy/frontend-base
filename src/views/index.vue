@@ -1,12 +1,12 @@
 <template>
-  <dev class="h-full bg-#fff p-2.5 flex flex-col">
+  <div class="h-full bg-#fff p-2.5 flex flex-col">
     <el-table :data="[]" border>
       <el-table-column type="index" label="序号" width="60"></el-table-column>
       <el-table-column prop="" label="" min-width="120"></el-table-column>
       <el-table-column prop="" label="" min-width="120"></el-table-column>
       <el-table-column prop="" label="" min-width="120"></el-table-column>
     </el-table>
-  </dev>
+  </div>
 </template>
 
 <script>
