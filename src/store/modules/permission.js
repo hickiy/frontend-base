@@ -1,65 +1,42 @@
 import auth from '@/utils/auth';
-import router, { constantRoutes, dynamicRoutes } from '@/router';
+import router, { constantRoutes, staticRoutes } from '@/router';
 import { getRouters } from '@/api/menu';
 import Layout from '@/layout/index';
 import ParentView from '@/layout/ParentView/index.vue';
 import InnerLink from '@/layout/InnerLink/index.vue';
 import { isHttp } from '@/utils/validate';
 
-
 // 匹配views里面所有的.vue文件
 const modules = import.meta.glob('./../../views/**/*.vue');
 
 const usePermissionStore = defineStore('permission', {
   state: () => ({
-    routes: [],
-    addRoutes: [],
-    defaultRoutes: [],
-    topbarRouters: [],
     sidebarRouters: []
   }),
   actions: {
-    setRoutes(routes) {
-      this.addRoutes = routes;
-      this.routes = constantRoutes.concat(routes);
-    },
-    setDefaultRoutes(routes) {
-      this.defaultRoutes = constantRoutes.concat(routes);
-    },
-    setTopbarRoutes(routes) {
-      this.topbarRouters = routes;
-    },
     setSidebarRouters(routes) {
       this.sidebarRouters = routes;
     },
     generateRoutes(roles) {
-      return new Promise((resolve) => {
-        // 向后端请求路由数据
-        getRouters().then((res) => {
-          // 基于系统appKey过滤菜单
-          let routes = res.data.filter(route => route.moduleId == 1);
-          // 后端数据响应式路由
-          const sdata = JSON.parse(JSON.stringify(routes));
-          const rdata = JSON.parse(JSON.stringify(routes));
-          const defaultData = JSON.parse(JSON.stringify(routes));
-          const sidebarRoutes = filterAsyncRouter(sdata);
-          const rewriteRoutes = filterAsyncRouter(rdata, false, true);
-          const defaultRoutes = filterAsyncRouter(defaultData);
-          const asyncRoutes = filterDynamicRoutes(dynamicRoutes);
-          asyncRoutes.forEach((route) => {
+      // 向后端请求路由数据
+      return getRouters().then((res) => {
+        // 基于系统appKey过滤菜单
+        let routes = res.data.filter(route => route.moduleId == 15);
+        let dynamicRoutes = filterAsyncRouter(routes);
+        this.setSidebarRouters(constantRoutes.concat(dynamicRoutes));
+
+        // 静态路由根据roles权限过滤并注册到default路由下
+        // const asyncRoutes = filterStaticRoutes(staticRoutes);
+        const asyncRoutes = staticRoutes; // 对于静态的详情页暂不做权限控制（有需求在进行处理）
+        asyncRoutes.forEach((route) => {
+          router.addRoute('default', route);
+        });
+
+        // 动态路由根据roles权限过滤并注册
+        dynamicRoutes.forEach((route) => {
+          if (!isHttp(route.path)) {
             router.addRoute(route);
-          });
-          this.setRoutes(rewriteRoutes);
-          this.setSidebarRouters(constantRoutes.concat(sidebarRoutes));
-          this.setDefaultRoutes(sidebarRoutes);
-          this.setTopbarRoutes(defaultRoutes);
-          // 根据roles权限生成可访问的路由表
-          rewriteRoutes.forEach((route) => {
-            if (!isHttp(route.path)) {
-              router.addRoute(route); // 动态添加可访问路由表
-            }
-          });
-          resolve();
+          }
         });
       });
     }
@@ -67,23 +44,25 @@ const usePermissionStore = defineStore('permission', {
 });
 
 // 遍历后台传来的路由字符串，转换为组件对象
-function filterAsyncRouter(asyncRouterMap, lastRouter = false, type = false) {
-  return asyncRouterMap.filter((route) => {
+function filterAsyncRouter(children, parent) {
+  return children.map((route) => {
     // 标识路由是否是目录
     if (Array.isArray(route.children) && route.children.length) {
       route.meta.routeType = 'folder';
     } else {
       route.meta.routeType = 'menu';
+      route.meta.icon = 'menu-default';
     }
     // 在meta中记录父级路由
-    if (lastRouter) {
-      route.meta.parent = JSON.parse(JSON.stringify(lastRouter));
+    if (parent) {
+      route.meta.parent = parent;
     }
-    if (type && route.children) {
-      route.children = filterChildren(route.children);
+    // 处理子路由
+    if (route.children) {
+      route.children = filterAsyncRouter(route.children, route);
     }
+    // 根据路由类型匹配对于的布局容器组件
     if (route.component) {
-      // Layout ParentView 组件特殊处理
       if (route.component === 'Layout') {
         route.component = Layout;
       } else if (route.component === 'ParentView') {
@@ -94,42 +73,12 @@ function filterAsyncRouter(asyncRouterMap, lastRouter = false, type = false) {
         route.component = loadView(route.component);
       }
     }
-    if (route.children != null && route.children && route.children.length) {
-      route.children = filterAsyncRouter(route.children, route, type);
-    } else {
-      delete route['children'];
-      delete route['redirect'];
-    }
-    return true;
+    return route;
   });
 }
 
-function filterChildren(childrenMap, lastRouter = false) {
-  var children = [];
-  childrenMap.forEach((el, index) => {
-    if (el.children && el.children.length) {
-      if (el.component === 'ParentView' && !lastRouter) {
-        el.children.forEach((c) => {
-          c.path = el.path + '/' + c.path;
-          if (c.children && c.children.length) {
-            children = children.concat(filterChildren(c.children, c));
-            return;
-          }
-          children.push(c);
-        });
-        return;
-      }
-    }
-    if (lastRouter) {
-      el.path = lastRouter.path + '/' + el.path;
-    }
-    children = children.concat(el);
-  });
-  return children;
-}
-
-// 动态路由遍历，验证是否具备权限
-export function filterDynamicRoutes(routes) {
+// 静态配置的路由遍历，验证是否具备权限
+export function filterStaticRoutes(routes) {
   const res = [];
   routes.forEach((route) => {
     if (route.permissions) {

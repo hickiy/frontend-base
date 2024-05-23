@@ -1,19 +1,8 @@
 @import './variables.module.scss';
 @import './transition.scss';
-@import './element-plus.scss';
+@import './common.scss';
 
-*,
-*:before,
-*:after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: Microsoft YaHei, Arial, sans-serif, PingFang SC, Helvetica Neue, Helvetica, Hiragino Sans GB;
-}
-
+/* reset default style for brower */
 a,
 a:focus,
 a:hover {
@@ -22,27 +11,40 @@ a:hover {
   text-decoration: none;
 }
 
-/* 不显示轮廓 */
+/* do not show outline when active or focus */
 *:focus,
 *:focus-visible,
 *:active {
   outline: none !important;
 }
 
-/* 消除自动填充的input背景色 */
+/* clear the default filled background color for input element */
 input:-webkit-autofill {
   -webkit-box-shadow: 0 0 0px 1000px transparent inset;
   transition: background-color 5000s ease-in-out 0s;
 }
 
-/*定义全局滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
+/* self defined the scroll bar width and height for brower */
 ::-webkit-scrollbar {
   width: 8px;
   height: 12px;
 }
 
-/*定义滑块*/
+/* self defined the slide block for scroll bar */
 ::-webkit-scrollbar-thumb {
   border-radius: 2px;
   background-color: #9093994d;
+}
+
+/* 针对所有浏览器 */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* 针对 Firefox */
+input[type="number"] {
+  appearance: textfield;
+  -moz-appearance: textfield;
 }

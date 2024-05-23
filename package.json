@@ -1,34 +1,33 @@
 {
   "name": "frontend-base",
-  "version": "0.1.0",
-  "description": "team cli project",
+  "version": "1.0.0",
+  "description": "a frontend cli base on vite",
   "author": "hickey",
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
+    "build": "vite build --mode test",
     "build:dev": "vite build --mode development",
-    "build:test": "vite build --mode test",
-    "build:prod": "vite build",
-    "preview": "vite preview",
-    "test": "vitest"
+    "build:prod": "vite build --mode production",
+    "lint": "eslint --ext .js,.vue src"
   },
   "repository": {
     "type": "git",
-    "url": "https://gitee.com/y_project/RuoYi-Vue.git"
+    "url": "https://github.com/hickiy/frontend-base.git"
   },
   "dependencies": {
     "@element-plus/icons-vue": "2.3.1",
     "@vueup/vue-quill": "1.2.0",
-    "@vueuse/core": "10.7.2",
+    "@vueuse/core": "^10.7.2",
     "axios": "1.6.7",
     "echarts": "5.4.3",
-    "element-plus": "2.5.3",
+    "element-plus": "^2.6.3",
     "file-saver": "2.0.5",
+    "ion-ofd": "^0.2.8",
     "js-cookie": "3.0.5",
     "nprogress": "0.2.0",
     "pinia": "2.1.7",
-    "pinia-plugin-persistedstate": "^3.2.1",
     "vue": "^3.4.15",
     "vue-cropper": "1.0.3",
     "vue-router": "4.2.5"
@@ -36,17 +35,18 @@
   "devDependencies": {
     "@unocss/preset-wind": "^0.58.4",
     "@vitejs/plugin-vue": "^5.0.3",
+    "@vitejs/plugin-vue-jsx": "^3.1.0",
     "@vue/compiler-sfc": "3.4.15",
     "autoprefixer": "^10.4.17",
     "postcss-pxtorem": "^6.1.0",
     "sass": "^1.74.1",
-    "svg-sprite": "^2.0.4",
     "typescript": "^5.3.3",
     "unocss": "^0.58.4",
     "unplugin-auto-import": "0.17.5",
     "unplugin-vue-setup-extend-plus": "1.0.0",
     "vite": "^5.0.12",
     "vite-plugin-compression": "0.5.1",
+    "vite-plugin-svg-icons": "^2.0.1",
     "vitest": "^1.4.0"
   }
 }

@@ -1,9 +1,13 @@
-import 'element-plus/theme-chalk/index.css'; // element-plus css
+import '@/assets/styles/element-plus.scss'; // element-plus theme
+import '@/assets/styles/index.scss'; // global css
 import 'uno.css'; // uno.css
 import 'nprogress/nprogress.css'; // progress bar style
-import '@/assets/styles/index.scss'; // global css
+
+
 import { createApp } from 'vue'; // vue3
 import ElementPlus from '@/element-plus'; // element-plus
+import zhCn from 'element-plus/dist/locale/zh-cn.mjs' // element-plus 中文
+
 import App from './App.vue'; // app
 import store from './store'; // pinia
 import router from './router'; // router
@@ -26,7 +30,8 @@ app.use(router);
 app.use(store);
 // element-plus 全量引入
 app.use(ElementPlus, {
-  size: 'default' // 支持 large、default、small
+  size: 'default', // 支持 large、default、small
+  locale: zhCn // element-plus 中文
 });
 // 应用挂载
 app.mount('#app');

@@ -12,16 +12,16 @@ export default {
       const vnode = render(...args);
       if (props.type == 'number' && props.decimal != null) {
         const propData = vnode.ctx?.vnode?.props;
-        const originKeydown = propData?.onKeydown;
         if (propData) {
-          propData.onKeydown = (e) => {
-            const value = e.target.value;
-            const reg = new RegExp(`^\\d{0,15}(\\.\\d{0,${props.decimal - 1}})?$`);
-            // 判断是否按下了数字键，限制最多输入15位整数和
-            if (e.key >= '0' && e.key <= '9' && !reg.test(value)) {
-              e.preventDefault();
-            }
-            originKeydown?.(e);
+          propData.onInput = (value) => {
+            const [integer, decimal] = value.split('.');
+            requestAnimationFrame(() => {
+              if (decimal?.length > props.decimal) {
+                ctx.emit('update:modelValue', `${integer}.${decimal.slice(0, props.decimal)}`);
+              } else {
+                ctx.emit('update:modelValue', value);
+              }
+            });
           };
         }
       }

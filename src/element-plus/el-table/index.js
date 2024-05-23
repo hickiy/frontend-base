@@ -6,11 +6,15 @@ export default {
   props: {
     setTable: {
       type: [Boolean, Array],
-      default: undefined
+      default: null
     },
     title: {
       type: [String],
-      default: ''
+      default: null
+    },
+    showOverflowTooltip: {
+      type: Boolean,
+      default: true
     }
   },
   setup(props, ctx) {
@@ -18,6 +22,11 @@ export default {
   },
   render(...args) {
     const children = [ElTable.render.apply(this, args)];
+    // return children[0]
+    if (this.height) {
+      typeof this.height == 'number' && (children[0].props.style.height = this.height + 'px');
+      typeof this.height == 'string' && (children[0].props.style.height = this.height);
+    }
     // table设置面板
     const setting = h(
       Prepend,
@@ -34,19 +43,15 @@ export default {
       children.unshift(setting);
     }
     const style = {
-      with: '100%',
+      width: '100%',
       position: 'relative',
       overflow: 'hidden',
       flex: 1
     };
-    if (this.$attrs.height) {
-      typeof this.$attrs.height == 'number' && (style.height = this.$attrs.height + 'px');
-      typeof this.$attrs.height == 'string' && (style.height = this.$attrs.height);
-    }
     if (this.setTable) {
       style.display = 'flex';
-      style.flexFlow = 'column ';
+      style.flexFlow = 'column';
     }
-    return h('div', { style }, children);
+    return h('div', { style, 'data-prefix': 'el' }, children);
   },
 };

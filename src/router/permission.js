@@ -3,7 +3,6 @@ import NProgress from 'nprogress';
 import { getToken } from '@/utils/cookies';
 import { isRelogin } from '@/utils/request';
 import useUserStore from '@/store/modules/user';
-import useSettingsStore from '@/store/modules/app';
 import usePermissionStore from '@/store/modules/permission';
 import useViewsStore from '@/store/modules/views';
 
@@ -16,7 +15,6 @@ let componentId = 0;
 export function beforeEach(to, from, next) {
   NProgress.start();
   if (getToken()) {
-    to.meta.title && useSettingsStore().setTitle(to.meta.title);
     /* has token*/
     if (to.path === '/login') {
       next({ path: '/' });
@@ -85,14 +83,15 @@ export function beforeResolve(to, from, next) {
       }
     }
   } else {
-    // 如果面包屑中不存, 则根据路由类型确定是重置还是前进  
+    // 如果面包屑中不存, 则根据路由类型确定是重置还是前进
     if (to.meta.routeType) {
       // 如果是菜单或者目录，则视为重置，删除所有面包屑, 删除所有缓存的视图
       const levelList = [];
       let meta = to.meta;
       while (meta) {
-        levelList.unshift({ ...meta, fullPath: to.fullPath, path: to.path, id: breadItemId++ });
-        meta = meta.parent && meta.parent.meta;
+        const { parent, ...rest } = meta;
+        levelList.unshift({ ...rest, fullPath: to.fullPath, path: to.path, id: breadItemId++ });
+        meta = parent?.meta;
       }
       breadcrumbs.splice(0, breadcrumbs.length, ...levelList);
       cachedViews.splice(0, cachedViews.length);
@@ -120,7 +119,7 @@ export function beforeResolve(to, from, next) {
        * 这里由于相同的路由可能不同的参数，相当于相同组件的不同实例
        * 不同路由也有可能复用相同的组件，相当于相同组件的不同实例
        * 因此需要对组件名称进行处理
-       * 
+       *
        * 首先检查toComponent是否具有一个名称
        * 其次检查toComponent是否已存在一被缓存的实例，如果不存在直接将名称写入到breadcrumb中
        * 如果存在则将组件进行一层浅拷贝，浅拷贝是为了防止修改组件名称影响到缓存的组件实例
@@ -149,9 +148,8 @@ export function beforeResolve(to, from, next) {
         to.meta.title = to.query.crumbTitle;
         Reflect.deleteProperty(to.query, 'crumbTitle');
       }
-      const searchParams = new URLSearchParams(to.query).toString();
-      const queryStr = searchParams.zise ? `?${searchParams.toString()}` : '';
-      breadcrumbs.push({ ...to.meta, fullPath: `${to.path}${queryStr}`, path: to.path, id: breadItemId++ });
+      const { parent, ...rest } = to.meta;
+      breadcrumbs.push({ ...rest, fullPath: to.fullPath, path: to.path, query: to.query, id: breadItemId++ });
     }
   }
   next();

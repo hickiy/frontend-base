@@ -1,11 +1,10 @@
 <template>
-  <el-breadcrumb id="breadcrumb-container" class="breadcrumb-container app-breadcrumb w-full ml-15px" separator="/">
+  <el-breadcrumb class="app-breadcrumb w-full ml-15px" separator="/">
     <transition-group name="breadcrumb">
       <el-breadcrumb-item v-for="(item, index) in breadcrumbs" :key="item.id">
-        <span v-if="item.redirect === 'noRedirect' || index == breadcrumbs.length - 1" class="no-redirect">{{
-          item.title
-        }}</span>
-        <a v-else @click.prevent="handleLink(item)">{{ item.title }}</a>
+        <svg-icon v-if="item.routeType == 'folder'" class="mr-2 text-base align-middle" :icon-class="item.icon" />
+        <span v-if="item.routeType === 'folder' || index == breadcrumbs.length - 1" class="no-redirect">{{ item.title }}</span>
+        <a v-else @click.prevent="handleLink(item)" class="have-link">{{ item.title }}</a>
       </el-breadcrumb-item>
     </transition-group>
   </el-breadcrumb>
@@ -17,19 +16,25 @@ const router = useRouter();
 const { breadcrumbs } = useViewsStore();
 function handleLink(item) {
   if (item.routeType == 'folder') return;
-  router.push({ path: item.fullPath });
+  router.push({ path: item.path, query: item.query });
 }
 </script>
 
 <style lang="scss" scoped>
-.app-breadcrumb.el-breadcrumb {
-  display: inline-block;
+.app-breadcrumb {
   font-size: 14px;
   line-height: 40px;
+  background: #fafafa;
   .no-redirect {
     color: #97a8be;
     cursor: text;
   }
+  .have-link {
+    color: #0e36ac;
+    &:hover {
+      color: #092794;
+      font-weight: bold !important;
+    }
+  }
 }
 </style>
-@/store/modules/views

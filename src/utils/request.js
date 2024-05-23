@@ -58,6 +58,10 @@ service.interceptors.request.use(
     return config;
   },
   (error) => {
+    // 删除pendedRes中的请求记录
+    if (error.config.requestKey) {
+      Reflect.deleteProperty(pendedRes, error.config.requestKey);
+    }
     Promise.reject(error);
   }
 );
@@ -112,6 +116,10 @@ service.interceptors.response.use(
     }
   },
   (error) => {
+    // 删除pendedRes中的请求记录
+    if (error.config.requestKey) {
+      Reflect.deleteProperty(pendedRes, error.config.requestKey);
+    }
     console.log('err: ' + error);
     let { message } = error;
     if (message == 'Network Error') {
@@ -148,12 +156,11 @@ function download(url, opt) {
   }
   return service(config)
     .then((res) => {
-      Message.success(`下载成功: ${opt.fileName}`);
+      ElMessage.success(`下载成功: ${opt.fileName}`);
       saveAs(res, opt.fileName);
     })
     .catch((e) => {
-      console.error(e);
-      Message.error('下载文件出现错误，请稍后重试');
+      ElMessage.error('下载文件出现错误，请稍后重试');
     })
     .finally(() => {
       loadingInstance.close();

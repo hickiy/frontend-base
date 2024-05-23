@@ -7,7 +7,7 @@
  * @param {Number} opt.endNum 结尾截取的长度
  * @returns {String} 截断后的字符串
  */
-export const strTruncate = (str, { startNum = 3, separator = '***', endNum = 4 } = {}) => {
+export const strMask = (str, { startNum = 3, separator = '***', endNum = 4 } = {}) => {
   if (str == null) return '';
   const len = str.length;
   if (len <= startNum + endNum) return str;

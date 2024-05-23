@@ -1,11 +1,21 @@
-import { ElMessage } from 'element-plus'; // 弹窗
 import { useDict } from './dict'; // 字典工具
 import { download } from './request'; // 下载工具
+import * as formatNum from './formatNum'; // 数字格式化
+import * as formatStr from './formatStr'; // 字符串格式化
+import * as validate from './validate'; // 校验工具
+import * as auth from './auth'; // 权限工具
+import * as formatTime from './formatTime'; // 时间格式化`
+import modal from './modal'; // 消息提示
 
 export default function (app) {
-  app.config.globalProperties.useDict = useDict;
-  app.config.globalProperties.download = download;
-  app.config.globalProperties.$modal = ElMessage;
+  app.config.globalProperties.$useDict = useDict;
+  app.config.globalProperties.$download = download;
+  app.config.globalProperties.$modal = modal;
+  app.config.globalProperties.$formatNum = formatNum;
+  app.config.globalProperties.$formatStr = formatStr;
+  app.config.globalProperties.$validate = validate;
+  app.config.globalProperties.$auth = auth;
+  app.config.globalProperties.$formatTime = formatTime;
   app.config.globalProperties.parseTime = function () { };
   app.config.globalProperties.resetForm = function () { };
   app.config.globalProperties.handleTree = function () { };

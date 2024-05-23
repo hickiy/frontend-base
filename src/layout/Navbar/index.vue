@@ -1,39 +1,33 @@
 <template>
-  <div class="navbar">
-    <div @click="toggleSideBar">
-      <el-icon :size="20" v-if="appStore.sidebar.opened"><Fold /></el-icon>
-      <el-icon :size="20" v-else><Expand /></el-icon>
+  <nav class="navbar">
+    <div class="opener" @click="toggleSideBar">
+      <el-icon size="1.5em">
+        <Fold v-if="appStore.sidebar.opened"></Fold>
+        <Expand v-else></Expand>
+      </el-icon>
     </div>
     <a href="/">
-      <img class="right-logo" style="width: 140px" src="@/assets/images/home_logo@2x.png" />
+      <img class="right-logo" src="@/assets/images/home_logo@2x.png" />
     </a>
     <el-divider direction="vertical"></el-divider>
-    <div class="text-xl font-bold grow">{{ title }}</div>
+    <div class="text-xl font-bold grow ml-2">{{ title }}</div>
     <el-icon><Bell /></el-icon>
     <div class="avatar-container pr-5">
       <el-dropdown @command="handleCommand" class="right-menu-item hover-effect" trigger="click">
         <div class="avatar-wrapper flex items-center">
-          <img src="@/assets/images/profile.jpg" class="user-avatar mr-5" />
+          <img src="@/assets/images/profile.jpg" class="user-avatar ml-5 mr-2" />
           <span class="text-sm font-bold">{{ userStore.name }}</span>
         </div>
         <template #dropdown>
           <el-dropdown-menu>
-            <router-link to="/user/profile">
-              <el-dropdown-item>个人中心</el-dropdown-item>
-            </router-link>
-            <el-dropdown-item command="setting">
-              <router-link to="/system/user">
-                <span>设置</span>
-              </router-link>
-            </el-dropdown-item>
-            <el-dropdown-item divided command="logout">
+            <el-dropdown-item command="logout">
               <span>退出登录</span>
             </el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
     </div>
-  </div>
+  </nav>
 </template>
 
 <script setup name="Navbar">
@@ -79,10 +73,23 @@ function logout() {
 @import '@/assets/styles/variables.module.scss';
 .navbar {
   height: $base-navbar-height;
-  background: #fff;
-  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+  background: #ffffff;
+  box-shadow: 0px 4px 4px 0px rgba(56, 85, 119, 0.07);
   display: flex;
   align-items: center;
+  .opener {
+    cursor: pointer;
+    background-color: #e9eaef;
+    width: 50px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 24px;
+  }
+  .right-logo{
+    width: 140px;
+  }
   .right-menu-item {
     display: inline-block;
     padding: 0 8px;

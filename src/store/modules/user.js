@@ -44,7 +44,7 @@ const useUserStore = defineStore('user', {
               this.roles = ['ROLE_DEFAULT'];
             }
             this.id = user.userId;
-            this.name = user.userName;
+            this.name = user.nickName;
             this.avatar = avatar;
             resolve(res);
           })

@@ -48,6 +48,5 @@ export default defineComponent({
   height: 1em;
   position: relative;
   fill: currentColor;
-  vertical-align: -2px;
 }
 </style>

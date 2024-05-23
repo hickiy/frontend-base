@@ -7,11 +7,13 @@ import { baseRemUnit } from './src/config.js'
 
 export default defineConfig(({ mode, command }) => {
   const env = loadEnv(mode, process.cwd());
-  const { VITE_APP_ENV } = env;
   return {
     // 部署生产环境和开发环境下的URL。
     // 默认情况下，vite 会假设你的应用是被部署在一个域名的根路径上
-    base: VITE_APP_ENV === 'production' ? '/' : '/',
+    base: env.VITE_PUBLIC_PATH,
+    build: {
+      outDir: 'smt-sys-pc',
+    },
     plugins: createVitePlugins(env, command === 'build'),
     resolve: {
       alias: {
@@ -24,7 +26,7 @@ export default defineConfig(({ mode, command }) => {
     },
     // vite 相关配置
     server: {
-      port: 80,
+      port: 8010,
       host: true,
       open: true,
       proxy: {
@@ -32,14 +34,22 @@ export default defineConfig(({ mode, command }) => {
           target: env.VITE_PROXY_TARGET,
           changeOrigin: true,
           rewrite: (p) => p.replace(/^\/api-server/, '')
-        }
+        },
+        '/files': {
+          target: env.VITE_PROXY_TARGET,
+          changeOrigin: true,
+          secure: false
+        },
       }
     },
     css: {
       postcss: {
         plugins: [
+          // 自动添加浏览器前缀
           autoprefixer(),
-          px2rem({ rootValue: baseRemUnit, propList: ['*', '!min-*', '!--*'] }),
+          // px转rem，用于适配在不同屏幕下的显示
+          px2rem({ rootValue: baseRemUnit, propList: ['*'] }),
+          // 移除css中的@charset
           {
             postcssPlugin: 'internal:charset-removal',
             AtRule: {

@@ -1,39 +1,33 @@
-import { getDicts } from '@/api/system/dict/data';
+import { getDicts } from '@/api/dict';
 
 // 字典缓存
 const cachedDict = {};
 
+/**
+ * @description: 对字典数据进行修剪
+ * @param {*} dictData
+ * @returns
+ */
 function pruneDict(dictData) {
-  const res = [];
-  dictData?.forEach?.((dict) => {
-    res.push({
-      label: dict.dictLabel,
-      value: dict.dictValue,
-    });
-  });
-  return res;
+  return dictData.map((item) => ({
+    label: item.dictLabel,
+    value: item.dictValue,
+  }));
 }
 
 /**
- * 获取字典数据
+ * @description 获取字典数据
+ * @param {String} type 字典类型
+ * @returns {Array} 字典数据
  */
-export function useDict(...args) {
-  const res = {};
-  const dictTypes = []
-  args.forEach((dictType) => {
-    if (cachedDict[dictType]) {
-      res[dictType] = ref(cachedDict[dictType]);
-    } else {
-      res[dictType] = ref([]);
-      dictTypes.push(dictType);
-    }
-  });
-  if (dictTypes.length) {
-    Promise.all(dictTypes.map(dictType => getDicts(dictType))).then(dictList => {
-      dictTypes.forEach((dictType, index) => {
-        res[dictType].value = cachedDict[dictType] = pruneDict(dictList[index]?.data);
-      });
+export function useDict(type) {
+  const result = ref([]);
+  if (cachedDict[type]) {
+    result.value = cachedDict[type];
+  } else {
+    getDicts(type).then(res => {
+      result.value = cachedDict[type] = pruneDict(res.data)
     });
   }
-  return res;
+  return result;
 }

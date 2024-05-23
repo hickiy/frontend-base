@@ -31,22 +31,12 @@ export default {
             }, 0);
           }
           let regStr = `.(${props.accept.replace(/(,\s+)/g, '|').replace(/\./g, '')})$`;
-          const lastFile = props.fileList.length >= 2 ? props.fileList[props.fileList.length - 2] : null;
-          // 文件校验逻辑
-          if (!new RegExp(regStr, 'i').test(file.name)) {
+          if (props.accept && !new RegExp(regStr, 'i').test(file.name)) {
+            // 校验文件类型，不符合则提示，如果不存在accept属性，则不校验
             instance.beforeUploadMsg.push('文件类型不正确!');
-          } else if (file.size > instance.limitSize * 1024 * 1024) {
+          } else if (instance.limitSize && file.size > instance.limitSize * 1024 * 1024) {
+            // 校验文件大小，不符合则提示，如果不存在limitSize属性，则不校验
             instance.beforeUploadMsg.push(`文件超过${instance.limitSize}M!`);
-          } else if (lastFile) {
-            // 处理后台文件返回的fileName,没有返回name的兼容问题
-            const name = lastFile.name || lastFile.fileName || '';
-            const lastFileType = name ? name.replace(/^.+\./, '').toLowerCase() : '';
-            const nextFileType = file.name.replace(/^.+\./, '').toLowerCase();
-            if (/(pdf|zip|ofd)/i.test(lastFileType)) {
-              if (lastFileType != nextFileType) instance.beforeUploadMsg.push(`${lastFileType}类型文件不能与${nextFileType}类型文件混传`);
-            } else if (/(pdf|zip|ofd)/i.test(nextFileType)) {
-              instance.beforeUploadMsg.push(`图片类型文件不能与${nextFileType}类型文件混传`);
-            }
           }
           return !instance.beforeUploadMsg.length;
         };

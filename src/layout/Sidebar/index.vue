@@ -1,18 +1,18 @@
 <template>
-  <div
+  <aside
     class="sidebar-container sidebar-wrap h-full"
     :class="{ 'has-logo': showLogo }"
     :style="{
-      backgroundColor: sideTheme === 'theme-dark' ? variables.menuBackground : variables.menuLightBackground,
+      backgroundColor: variables.menuBackground,
       width: !isCollapse ? variables.sideBarWidth : variables.sideBarMiniWidth
     }"
   >
-    <el-scrollbar :class="sideTheme" wrap-class="scrollbar-wrapper">
+    <el-scrollbar class="theme-dark" wrap-class="scrollbar-wrapper">
       <el-menu
         :default-active="activeMenu"
         :collapse="isCollapse"
-        :background-color="sideTheme === 'theme-dark' ? variables.menuBackground : variables.menuLightBackground"
-        :text-color="sideTheme === 'theme-dark' ? variables.menuColor : variables.menuLightColor"
+        :background-color="variables.menuBackground"
+        :text-color="variables.menuColor"
         :unique-opened="true"
         :active-text-color="theme"
         :collapse-transition="false"
@@ -27,33 +27,29 @@
         />
       </el-menu>
     </el-scrollbar>
-  </div>
+  </aside>
 </template>
 
 <script setup name="Sidebar">
 import SidebarItem from './SidebarItem';
-import variables from '/E:/learn/frontend-base/src/assets/styles/variables.module.scss';
+import variables from '@/assets/styles/variables.module.scss';
 import useAppStore from '@/store/modules/app';
 import useSettingsStore from '@/store/modules/app';
 import usePermissionStore from '@/store/modules/permission';
+import useViewsStore from '@/store/modules/views';
 
-const route = useRoute();
 const appStore = useAppStore();
 const settingsStore = useSettingsStore();
 const permissionStore = usePermissionStore();
+const { breadcrumbs } = useViewsStore();
 
 const sidebarRouters = computed(() => permissionStore.sidebarRouters);
 const showLogo = computed(() => settingsStore.sidebarLogo);
-const sideTheme = computed(() => settingsStore.sideTheme);
 const theme = computed(() => settingsStore.theme);
 const isCollapse = computed(() => !appStore.sidebar.opened);
 
 const activeMenu = computed(() => {
-  const { meta, path } = route;
-  if (meta.activeMenu) {
-    return meta.activeMenu;
-  }
-  return path;
+  return breadcrumbs[0]?.path;
 });
 </script>
 <style scoped lang="scss">
@@ -62,7 +58,7 @@ const activeMenu = computed(() => {
     &.is-active {
       color: #fff;
       background-color: #0e36ac;
-      &:hover{
+      &:hover {
         background-color: #282e3c !important;
       }
     }

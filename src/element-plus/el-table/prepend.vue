@@ -1,31 +1,33 @@
 <template>
-  <div class="el-table-setting flex">
-    <div v-if="title" class="title fw-b">{{ title }}</div>
-    <div class="flex flex-row grow justify-end">
+  <div class="el-table-setting flex items-center">
+    <div v-if="title" class="title font-bold">{{ title }}</div>
+    <div class="grow">
       <slot></slot>
-      <div class="setting flex flex-row items-center justify-center cursor-pointer">
-        <el-popover placement="bottom-start" width="150" trigger="click">
-          <template #reference>
-            <el-icon :size="22">
-              <Tools />
-            </el-icon>
-          </template>
-          <div class="popover-title">列表展示信息</div>
-          <el-checkbox :indeterminate="true">全部（{{ ids.length + '/' + columns.length }}项）</el-checkbox>
-          <el-checkbox-group v-model="ids">
-            <el-checkbox
-              v-for="(c, i) in columns"
-              :label="c.id"
-              :key="c.id"
-              :disabled="!!c.fixed || c.type != 'default'"
-              :checked="true"
-              @change="columnChange($event, c)"
-              >{{ c.label }}</el-checkbox
-            >
-          </el-checkbox-group>
-        </el-popover>
-      </div>
     </div>
+    <el-popover width="240" trigger="click">
+      <template #reference>
+        <div class="ml-3 setting cursor-pointer self-center flex flex-row justify-center items-center">
+          <el-icon size="1.5em">
+            <Setting />
+          </el-icon>
+        </div>
+      </template>
+      <template #default>
+        <div class="popover-title">列表展示信息</div>
+        <el-checkbox :indeterminate="true">全部（{{ ids.length + '/' + columns.length }}项）</el-checkbox>
+        <el-checkbox-group v-model="ids" class="flex flex-col">
+          <el-checkbox
+            v-for="(c, i) in columns"
+            :label="c.label"
+            :value="c.id"
+            :key="c.id"
+            :disabled="!!c.fixed || c.type != 'default'"
+            :checked="true"
+            @change="columnChange($event, c)"
+          ></el-checkbox>
+        </el-checkbox-group>
+      </template>
+    </el-popover>
   </div>
 </template>
 
@@ -60,8 +62,7 @@ export default {
 <style lang="scss" scoped>
 .el-table-setting {
   width: 100%;
-  padding: 0 10px 10px 10px;
-  min-height: 30px;
+  padding: 10px 10px 4px 10px;
 }
 .title {
   color: #1e2e4e;
@@ -72,7 +73,9 @@ export default {
 }
 .setting {
   width: 30px;
+  height: 30px;
   border: 1px solid #e5e6eb;
+  border-radius: 4px;
 }
 .popover-title {
   font-size: 16px;

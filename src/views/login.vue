@@ -1,17 +1,11 @@
 <template>
-  <div class="login">
+  <div class="login w-screen h-screen">
     <!-- 登录输入框 -->
     <div class="content flex flex-col justify-around">
       <div class="form-sub-title">欢迎您进入运营管理中心！</div>
       <el-form class="login-form" ref="loginRef" :model="loginForm" :rules="loginRules" hide-required-asterisk>
         <el-form-item prop="username" label="账号">
-          <el-input
-            v-model="loginForm.username"
-            prefix-icon="icon-user"
-            type="text"
-            auto-complete="user"
-            placeholder="请输入账号或手机号"
-          >
+          <el-input v-model="loginForm.username" prefix-icon="icon-user" type="text" auto-complete="user" placeholder="请输入账号或手机号">
           </el-input>
         </el-form-item>
         <el-form-item prop="password" label="密码">
@@ -106,12 +100,8 @@ getCookie();
 
 <style lang="scss" scoped>
 .login {
-  width: 100%;
-  height: 100%;
-  min-height: 768px;
   background: url('@/assets/login/login_logo_white@2x.png') 140px 60px / 140px auto no-repeat,
-    url('@/assets/login/login_title_2@2x.png') center 80px / 507px auto no-repeat,
-    url('@/assets/login/login_bg@2x.png') 0 0 / 100% no-repeat, #f7f8fa;
+    url('@/assets/login/login_title_2@2x.png') center 80px / 507px auto no-repeat, url('@/assets/login/login_bg@2x.png') 0 0 / 100% no-repeat, #f7f8fa;
   display: grid;
   grid-template-rows: auto 38px;
   grid-template-columns: 100%;
