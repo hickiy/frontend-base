@@ -93,8 +93,10 @@ export function beforeResolve(to, from, next) {
         levelList.unshift({ ...rest, fullPath: to.fullPath, path: to.path, id: breadItemId++ });
         meta = parent?.meta;
       }
-      breadcrumbs.splice(0, breadcrumbs.length, ...levelList);
-      cachedViews.splice(0, cachedViews.length);
+      setTimeout(() => {
+        breadcrumbs.splice(0, breadcrumbs.length, ...levelList);
+        cachedViews.splice(0, cachedViews.length);
+      }, 200);
     } else {
       // 否则视为前进
       /**
