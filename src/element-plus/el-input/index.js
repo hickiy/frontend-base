@@ -11,7 +11,7 @@ export default {
     return (...args) => {
       const vnode = render(...args);
       if (props.type == 'number' && props.decimal != null) {
-        const propData = vnode.ctx?.vnode?.props;
+        const propData = vnode.props;
         if (propData) {
           propData.onInput = (value) => {
             const [integer, decimal] = value.split('.');

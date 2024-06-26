@@ -30,7 +30,7 @@ app.use(router);
 app.use(store);
 // element-plus 全量引入
 app.use(ElementPlus, {
-  size: 'default', // 支持 large、default、small
+  size: 'large', // 支持 large、default、small
   locale: zhCn // element-plus 中文
 });
 // 应用挂载
