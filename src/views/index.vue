@@ -4,12 +4,8 @@
 </template>
 
 <script>
-import { Plus } from '@element-plus/icons-vue';
 export default {
   name: 'Index',
-  components: {
-    Plus
-  },
   data() {
     return {};
   }
