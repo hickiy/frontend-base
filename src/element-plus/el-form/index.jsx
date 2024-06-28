@@ -10,7 +10,7 @@ export default {
     const showCollapse = ref(false);
     onMounted(() => {
       if (hasAppend) {
-        showCollapse.value = wrapRef.value.scrollHeight > wrapRef.value.clientHeight;
+        showCollapse.value = wrapRef.value?.scrollHeight > wrapRef.value?.clientHeight;
       }
     });
     if (hasAppend) {
