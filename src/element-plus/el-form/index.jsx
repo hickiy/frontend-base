@@ -3,7 +3,7 @@ export default {
   name: 'ElForm',
   extends: ElForm,
   setup(props, ctx) {
-    const render = ElForm.setup(props, ctx);
+    const defaultSlot = ctx.slots.default;
     const hasAppend = ctx.slots.append && props.inline;
     const isCollapse = ref(true);
     const wrapRef = ref(null);
@@ -13,10 +13,11 @@ export default {
         showCollapse.value = wrapRef.value.scrollHeight > wrapRef.value.clientHeight;
       }
     });
-    return (...arg) => [
-      hasAppend ? (
+    if (hasAppend) {
+      ctx.slots._ = undefined;
+      ctx.slots.default = () => [
         <div class={['flex flex-row overflow-hidden justify-between', isCollapse.value ? 'h-62px' : '']} ref={wrapRef}>
-          <div>{render(...arg)}</div>
+          <div>{...defaultSlot()}</div>
           <div class="flex-shrink-0">
             {...ctx.slots.append()}
             {showCollapse.value && (
@@ -27,9 +28,8 @@ export default {
             )}
           </div>
         </div>
-      ) : (
-        render(...arg)
-      )
-    ];
+      ];
+    }
+    return ElForm.setup(props, ctx);
   }
 };
