@@ -6,25 +6,22 @@ export default {
     decimal: Number
   },
   setup(props, ctx) {
-    const { setup } = ElInput;
-    const render = setup(props, ctx);
-    return (...args) => {
-      const vnode = render(...args);
-      if (props.type == 'number' && props.decimal != null) {
-        const propData = vnode.props;
-        if (propData) {
-          propData.onInput = (value) => {
-            const [integer, decimal] = value.split('.');
-            requestAnimationFrame(() => {
-              if (decimal?.length > props.decimal) {
-                ctx.emit('update:modelValue', `${integer}.${decimal.slice(0, props.decimal)}`);
-              } else {
-                ctx.emit('update:modelValue', value);
-              }
-            });
-          };
+    const render = ElInput.setup(props, ctx);
+    const instance = getCurrentInstance();
+    const updateModelValue = instance.vnode?.props?.['onUpdate:modelValue'];
+    const wrapFn = (value) => {
+      if (updateModelValue) {
+        const [integer, decimal] = value.split('.');
+        if (props.type == 'number' && props.decimal != null && decimal?.length > props.decimal) {
+          updateModelValue(`${integer}.${decimal.slice(0, props.decimal)}`);
+        } else {
+          updateModelValue(value)
         }
       }
+    };
+    return (...args) => {
+      const vnode = render(...args)
+      instance.vnode.props['onUpdate:modelValue'] = wrapFn;
       return vnode;
     };
   }

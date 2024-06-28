@@ -4,22 +4,7 @@
     <div class="ion-search-area--bg pt-4 pl-4 pr-4">
       <el-form :model="form" ref="form" label-width="80px" inline>
         <el-form-item label="名字" prop="name">
-          <el-input v-model="form.name" placeholder="请输入名字"></el-input>
-        </el-form-item>
-        <el-form-item label="名字" prop="name">
-          <el-input v-model="form.name" placeholder="请输入名字"></el-input>
-        </el-form-item>
-        <el-form-item label="名字" prop="name">
-          <el-input v-model="form.name" placeholder="请输入名字"></el-input>
-        </el-form-item>
-        <el-form-item label="名字" prop="name">
-          <el-input v-model="form.name" placeholder="请输入名字"></el-input>
-        </el-form-item>
-        <el-form-item label="名字" prop="name">
-          <el-input v-model="form.name" placeholder="请输入名字"></el-input>
-        </el-form-item>
-        <el-form-item label="名字" prop="name">
-          <el-input v-model="form.name" placeholder="请输入名字"></el-input>
+          <el-input v-model="form.name" placeholder="请输入名字" type="number" :decimal="2"></el-input>
         </el-form-item>
         <template #append>
           <el-button type="primary">搜索</el-button>
